@@ -1,0 +1,16 @@
+{
+  "name": "Coach Hypertrophie",
+  "short_name": "Coach",
+  "description": "Programme de musculation pour la prise de masse : séance du jour, charge conseillée, coach vocal, rapport.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ECEDE8",
+  "theme_color": "#FFC629",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
