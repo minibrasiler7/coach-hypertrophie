@@ -246,7 +246,7 @@ X('di_smith','Développé incliné barre guidée','pecs',['triceps','epaules'],'
 X('di_barre','Développé incliné barre','pecs',['triceps','epaules'],'press_incline','inclinebar','barbell','c',2.5,{ep:3,co:2,po:2},'Barbell_Incline_Bench_Press_-_Medium_Grip',
   ['Banc incliné à 30°, prise un peu plus large que les épaules.','Descends la barre sous les clavicules.','Garde les fesses sur le banc.'],{start:30});
 X('pecdeck','Pec deck (butterfly)','pecs',[],'fly','pecdeck','machine','i',5,{ep:2},'Butterfly',
-  ['Siège réglé : coudes à hauteur d\'épaules.','Ramène les bras devant toi, serre une seconde.','Reviens lentement jusqu\'à sentir l\'étirement des pectoraux.'],{start:25});
+  ['Siège réglé : coudes à hauteur d\'épaules.','Ramène les bras devant toi, serre une seconde.','Reviens lentement jusqu\'à sentir l\'étirement des pectoraux.'],{start:25,say:'Pec deck'});
 X('ecarte_poulie','Écarté à la poulie vis-à-vis','pecs',[],'fly','cable','cable','i',2.5,{ep:2,co:1},'Cable_Crossover',
   ['Poulies hautes, un pied devant, buste légèrement penché.','Ramène les mains devant toi, coudes légèrement fléchis.','Laisse les bras s\'ouvrir lentement au retour.'],{per:1,start:10});
 X('ecarte_poulie_basse','Écarté poulie basse','pecs',[],'fly','cable','cable','i',2.5,{ep:1,co:1},'Low_Cable_Crossover',
@@ -288,7 +288,7 @@ X('de_machine','Développé épaules machine','epaules',['triceps'],'press_v','s
 X('de_neutre','Développé épaules haltères, prise neutre','epaules',['triceps'],'press_v','dumbbell','dumbbell','c',2,{ep:1,co:1,po:1,do:1},'Standing_Palms-In_Dumbbell_Press',
   ['Haltères devant les épaules, paumes face à face.','Pousse vers le haut, coudes vers l\'avant.','Cette prise est plus douce pour l\'épaule.'],{per:1,start:10});
 X('de_smith','Développé épaules barre guidée','epaules',['triceps'],'press_v','smith','smith','c',2.5,{ep:2,co:1,po:2,do:1},'Smith_Machine_Overhead_Shoulder_Press',
-  ['Assis sous la barre guidée, barre au niveau du menton.','Pousse au-dessus de la tête.','Coudes sous la barre.'],{start:20});
+  ['Assis sous la barre guidée, barre au niveau du menton.','Pousse au-dessus de la tête.','Garde les coudes sous la barre.'],{start:20});
 X('de_barre','Développé militaire barre','epaules',['triceps'],'press_v','barbell','barbell','c',2.5,{ep:3,co:1,po:2,do:2,nu:1},'Standing_Military_Press',
   ['Debout, barre sur le haut de la poitrine, ventre gainé.','Pousse la barre au-dessus de la tête.','Serre les fessiers pour ne pas cambrer.'],{start:30});
 X('lat_halt','Élévations latérales haltères','epaules',[],'lateral','dumbbell','dumbbell','i',1,{ep:2,po:1,nu:1},'Side_Lateral_Raise',
@@ -320,9 +320,9 @@ X('curl_pupitre_machine','Curl pupitre machine','biceps',[],'curl','curlmachine'
 X('curl_pupitre','Curl pupitre barre EZ','biceps',[],'curl','preacher','barbell','i',2.5,{co:2,po:1},'Preacher_Curl',
   ['Bras sur le pupitre, barre EZ en mains.','Monte la barre vers les épaules.','Descends lentement, sans décoller les coudes.'],{start:15});
 X('curl_halt','Curl haltères debout','biceps',[],'curl','dumbbell','dumbbell','i',1,{co:1,po:1},'Dumbbell_Bicep_Curl',
-  ['Debout, haltères le long du corps.','Monte en tournant les paumes vers le haut.','Coudes fixes.'],{per:1,start:9});
+  ['Debout, haltères le long du corps.','Monte en tournant les paumes vers le haut.','Garde les coudes fixes.'],{per:1,start:9});
 X('curl_marteau','Curl marteau','biceps',[],'hammer','dumbbell','dumbbell','i',1,{co:1},'Hammer_Curls',
-  ['Haltères le long du corps, paumes face à face.','Monte sans tourner les poignets.','Coudes collés au buste.'],{per:1,start:10});
+  ['Haltères le long du corps, paumes face à face.','Monte sans tourner les poignets.','Garde les coudes collés au buste.'],{per:1,start:10});
 X('curl_marteau_corde','Curl marteau à la corde','biceps',[],'hammer','cable','cable','i',2.5,{co:1},'Cable_Hammer_Curls_-_Rope_Attachment',
   ['Poulie basse, corde, paumes face à face.','Monte la corde vers les épaules.','Coudes fixes, descends lentement.'],{start:20});
 X('curl_inverse','Curl inversé barre EZ','biceps',[],'hammer','ezbar','barbell','i',2.5,{co:2,po:2},'Reverse_Barbell_Curl',
@@ -334,13 +334,13 @@ X('tri_corde_haut','Extension triceps au-dessus de la tête, poulie','triceps',[
 X('tri_halt_haut','Extension triceps haltère au-dessus de la tête','triceps',[],'tri_overhead','dumbbell','dumbbell','i',2,{ep:2,co:2,po:1},'Seated_Triceps_Press',
   ['Assis, un haltère tenu à deux mains au-dessus de la tête.','Descends derrière la nuque, coudes vers le plafond.','Tends les bras sans écarter les coudes.'],{start:14});
 X('barre_front','Barre au front (barre EZ)','triceps',[],'tri_overhead','ezbar','barbell','i',2.5,{ep:1,co:3,po:1},'EZ-Bar_Skullcrusher',
-  ['Allongé, barre au-dessus du front, bras tendus.','Fléchis les coudes, descends la barre vers le front.','Coudes fixes et serrés.'],{start:20});
+  ['Allongé, barre au-dessus du front, bras tendus.','Fléchis les coudes, descends la barre vers le front.','Garde les coudes fixes et serrés.'],{start:20,say:'Barre au front'});
 X('tri_corde','Extension triceps poulie haute, corde','triceps',[],'tri_push','cable','cable','i',2.5,{co:2,po:1},'Triceps_Pushdown_-_Rope_Attachment',
   ['Face à la poulie haute, coudes collés au corps.','Tends les bras vers le bas, écarte la corde en bas.','Remonte jusqu\'à la poitrine.'],{start:20});
 X('tri_barre','Extension triceps poulie haute, barre','triceps',[],'tri_push','cable','cable','i',2.5,{co:2,po:2},'Triceps_Pushdown',
-  ['Face à la poulie haute, barre en mains.','Pousse vers le bas jusqu\'aux bras tendus.','Coudes immobiles.'],{start:25});
+  ['Face à la poulie haute, barre en mains.','Pousse vers le bas jusqu\'aux bras tendus.','Garde les coudes immobiles.'],{start:25});
 X('tri_machine','Extension triceps machine','triceps',[],'tri_push','trimachine','machine','i',5,{co:2,po:1},'Machine_Triceps_Extension',
-  ['Bras sur l\'appui, poignées en mains.','Tends les bras.','Reviens lentement, coudes fixes.'],{start:20});
+  ['Bras sur l\'appui, poignées en mains.','Tends les bras jusqu\'au bout.','Reviens lentement, coudes fixes.'],{start:20});
 X('dips_machine','Dips machine','triceps',['pecs','epaules'],'tri_push','dipmachine','machine','c',5,{ep:2,co:2,po:1},'Dip_Machine',
   ['Assis, mains sur les poignées, coudes vers l\'arrière.','Pousse vers le bas jusqu\'aux bras tendus.','Remonte en contrôlant.'],{start:40});
 X('dips','Dips aux barres parallèles','triceps',['pecs','epaules'],'tri_push','dipbars','body','c',2.5,{ep:3,co:2,po:2},'Dips_-_Triceps_Version',
@@ -384,11 +384,11 @@ X('hip_thrust','Hip thrust barre','fessiers',['ischios'],'glute','barbell','barb
 X('kick_poulie','Kickback fessier à la poulie','fessiers',[],'glute','cable','cable','i',2.5,{do:1,ha:1},'One-Legged_Cable_Kickback',
   ['Sangle à la cheville, face à la poulie basse.','Pousse la jambe vers l\'arrière.','Ne cambre pas le dos.'],{per:1,start:10});
 X('abducteurs','Abducteurs machine','fessiers',[],'glute','abductor','machine','i',5,{ha:1},'Thigh_Abductor',
-  ['Assis, coussins à l\'extérieur des genoux.','Écarte les jambes.','Reviens lentement.'],{start:30});
+  ['Assis, coussins à l\'extérieur des genoux.','Écarte les jambes le plus loin possible.','Reviens lentement, sans lâcher la tension.'],{start:30});
 X('leg_curl_assis','Leg curl assis','ischios',[],'ham_curl','legcurlseated','machine','i',5,{ge:1},'Seated_Leg_Curl',
   ['Dossier réglé, coussin au-dessus des talons.','Ramène les talons sous le siège.','Remonte lentement jusqu\'aux jambes tendues.'],{start:30});
 X('leg_curl_allonge','Leg curl allongé','ischios',[],'ham_curl','legcurllying','machine','i',5,{ge:1,do:1},'Lying_Leg_Curls',
-  ['À plat ventre, coussin au-dessus des talons.','Ramène les talons vers les fessiers.','Hanches collées au banc.'],{start:25});
+  ['À plat ventre, coussin au-dessus des talons.','Ramène les talons vers les fessiers.','Garde les hanches collées au banc.'],{start:25});
 X('leg_curl_debout','Leg curl debout','ischios',[],'ham_curl','legcurlstanding','machine','i',2.5,{ge:1},'Standing_Leg_Curl',
   ['Debout, une jambe calée.','Ramène le talon vers la fesse.','Contrôle la descente.'],{per:1,start:10});
 
@@ -398,21 +398,23 @@ X('mollets_debout','Mollets debout machine','mollets',[],'calf','calfstanding','
 X('mollets_presse','Mollets à la presse','mollets',[],'calf','legpress','machine','i',10,{ch:2},'Calf_Press_On_The_Leg_Press_Machine',
   ['Avant des pieds en bas du plateau.','Pousse avec les pointes de pieds.','Laisse les talons revenir loin : étirement complet.'],{start:60});
 X('mollets_assis','Mollets assis machine','mollets',[],'calf','calfseated','machine','i',5,{ch:2},'Seated_Calf_Raise',
-  ['Assis, coussins sur les genoux.','Monte les talons.','Descends lentement jusqu\'à l\'étirement.'],{start:20});
+  ['Assis, coussins sur les genoux.','Monte les talons le plus haut possible.','Descends lentement jusqu\'à l\'étirement.'],{start:20});
 X('mollets_smith','Mollets debout barre guidée','mollets',[],'calf','smith','smith','i',5,{ch:2,do:1},'Smith_Machine_Calf_Raise',
-  ['Barre guidée sur les trapèzes, pointes sur une cale.','Monte sur les pointes.','Étirement complet en bas.'],{start:40});
+  ['Barre guidée sur les trapèzes, pointes sur une cale.','Monte sur les pointes de pieds.','Étirement complet en bas.'],{start:40});
 X('mollets_halt','Mollets debout sur une jambe, haltère','mollets',[],'calf','dumbbell','dumbbell','i',2,{ch:2},'Standing_Dumbbell_Calf_Raise',
-  ['Un pied sur une marche, haltère dans la main du même côté.','Monte sur la pointe.','Descends le talon sous la marche.'],{start:10});
+  ['Un pied sur une marche, haltère dans la main du même côté.','Monte sur la pointe du pied.','Descends le talon sous la marche.'],{start:10});
 
 // ---------- Abdominaux
+X('dragon_flag','Relevé de jambes sur banc, descente dragon flag','abdos',[],'abs','body','body','i',2.5,{do:2,ep:1,nu:1,ha:1},'Flat_Bench_Lying_Leg_Raise',
+  ['Allongé sur un banc, mains agrippées au banc derrière la tête.','Monte les jambes tendues, puis décolle le bassin vers le plafond.','Redescends lentement, corps gainé et aligné, sans cambrer le bas du dos.'],{bw:1,noload:1,reps:[6,12],say:'Relevé de jambes sur banc'});
 X('crunch_poulie','Crunch à la poulie haute','abdos',[],'abs','cable','cable','i',2.5,{do:2,nu:1},'Cable_Crunch',
   ['À genoux face à la poulie haute, corde près des tempes.','Enroule le buste vers les genoux.','Les hanches ne bougent pas.'],{start:25});
 X('crunch_machine','Crunch machine','abdos',[],'abs','abmachine','machine','i',5,{do:2,nu:1},'Ab_Crunch_Machine',
-  ['Assis, pieds calés, poignées en mains.','Enroule le buste vers l\'avant.','Reviens lentement.'],{start:25});
+  ['Assis, pieds calés, poignées en mains.','Enroule le buste vers l\'avant.','Reviens lentement, sans lâcher la tension.'],{start:25});
 X('releve_genoux','Relevé de genoux à la chaise romaine','abdos',[],'abs','captain','body','i',2.5,{do:1,ep:1,ha:2},'Knee_Hip_Raise_On_Parallel_Bars',
   ['Avant-bras sur les appuis, dos contre le dossier.','Monte les genoux vers la poitrine.','Enroule le bassin en haut.'],{bw:1,noload:1});
 X('releve_jambes','Relevé de jambes suspendu','abdos',[],'abs','pullupbar','body','i',2.5,{do:1,ep:2,ha:2,po:1},'Hanging_Leg_Raise',
-  ['Suspendu à la barre, bras tendus.','Monte les jambes à l\'horizontale.','Sans balancer.'],{bw:1,noload:1});
+  ['Suspendu à la barre, bras tendus.','Monte les jambes à l\'horizontale.','Monte sans te balancer.'],{bw:1,noload:1});
 X('crunch_sol','Crunch au sol','abdos',[],'abs','body','body','i',2.5,{do:1,nu:2},'Crunches',
   ['Allongé, genoux fléchis, mains aux tempes.','Décolle les épaules en enroulant le buste.','Ne tire pas sur la nuque.'],{bw:1,noload:1});
 X('dead_bug','Dead bug','abdos',[],'abs','body','body','i',2.5,{ep:1,ha:1},'Dead_Bug',
@@ -441,7 +443,7 @@ const SLOTS = {
   glute:['hip_thrust','kick_poulie','abducteurs'],
   ham_curl:['leg_curl_assis','leg_curl_allonge','leg_curl_debout'],
   calf:['mollets_debout','mollets_presse','mollets_assis','mollets_smith','mollets_halt'],
-  abs:['crunch_poulie','crunch_machine','releve_genoux','releve_jambes','crunch_sol','dead_bug']
+  abs:['dragon_flag','crunch_poulie','crunch_machine','releve_genoux','releve_jambes','crunch_sol','dead_bug']
 };
 /* Créneaux voisins : même muscle, autre mouvement. Servent quand rien ne convient dans le créneau. */
 const FALLBACK = {
@@ -460,17 +462,19 @@ const TPL = {
     {slot:'pull_v',sets:3,reps:[8,12]},{slot:'lateral',sets:3,reps:[12,20]},{slot:'tri_overhead',sets:3,reps:[10,15]},
     {slot:'curl',sets:3,reps:[10,15]}]},
   LA:{n:'Bas du corps A', items:[
-    {slot:'squat',sets:3,reps:[6,10]},{slot:'hinge',sets:3,reps:[8,12]},{slot:'quad_iso',sets:3,reps:[10,15]},
-    {slot:'ham_curl',sets:3,reps:[10,15]},{slot:'calf',sets:4,reps:[8,15]},{slot:'abs',sets:3,reps:[10,15]}]},
+    {slot:'squat',sets:3,reps:[6,10],pref:'presse'},{slot:'squat',sets:3,reps:[8,12],pref:'fente_bulgare'},
+    {slot:'hinge',sets:3,reps:[8,12]},{slot:'ham_curl',sets:3,reps:[10,15]},
+    {slot:'calf',sets:4,reps:[8,15]},{slot:'abs',sets:3,reps:[10,15]}]},
   UB:{n:'Haut du corps B', items:[
     {slot:'pull_v',sets:3,reps:[8,12],pref:'tirage_neutre'},{slot:'press_incline',sets:3,reps:[8,12],pref:'di_machine'},
     {slot:'row',sets:3,reps:[10,15],pref:'rowing_machine'},{slot:'fly',sets:3,reps:[10,15]},
     {slot:'rear_delt',sets:3,reps:[12,20]},{slot:'lateral',sets:3,reps:[12,20],pref:'lat_poulie'},
     {slot:'hammer',sets:3,reps:[10,15]},{slot:'tri_push',sets:3,reps:[10,15]}]},
   LB:{n:'Bas du corps B', items:[
-    {slot:'ham_curl',sets:3,reps:[8,12]},{slot:'squat',sets:3,reps:[8,12],pref:'hack'},{slot:'glute',sets:3,reps:[8,12]},
-    {slot:'quad_iso',sets:3,reps:[12,20]},{slot:'calf',sets:4,reps:[10,20],pref:'mollets_assis'},
-    {slot:'abs',sets:3,reps:[10,15],pref:'releve_genoux'}]},
+    {slot:'squat',sets:3,reps:[8,12],pref:'fente_bulgare'},{slot:'squat',sets:3,reps:[10,15],pref:'presse'},
+    {slot:'ham_curl',sets:3,reps:[8,12]},{slot:'hinge',sets:3,reps:[10,15],pref:'ext_lombaires'},
+    {slot:'quad_iso',sets:2,reps:[12,20]},{slot:'calf',sets:4,reps:[10,20],pref:'mollets_assis'},
+    {slot:'abs',sets:3,reps:[10,15]}]},
   PA:{n:'Poussée A', items:[
     {slot:'press_h',sets:3,reps:[6,10]},{slot:'press_v',sets:3,reps:[8,12]},{slot:'fly',sets:3,reps:[10,15]},
     {slot:'lateral',sets:4,reps:[12,20]},{slot:'tri_overhead',sets:3,reps:[10,15]},{slot:'tri_push',sets:2,reps:[10,15]}]},
@@ -486,41 +490,39 @@ const TPL = {
     {slot:'row',sets:3,reps:[10,15],pref:'rowing_halt'},{slot:'rear_delt',sets:3,reps:[12,20],pref:'face_pull'},
     {slot:'hammer',sets:3,reps:[10,15]},{slot:'curl',sets:3,reps:[10,15],pref:'curl_poulie'}]},
   FA:{n:'Corps entier A', items:[
-    {slot:'squat',sets:3,reps:[6,10]},{slot:'press_h',sets:3,reps:[6,10]},{slot:'row',sets:3,reps:[8,12]},
+    {slot:'squat',sets:3,reps:[6,10],pref:'presse'},{slot:'press_h',sets:3,reps:[6,10]},{slot:'row',sets:3,reps:[8,12]},
     {slot:'ham_curl',sets:3,reps:[10,15]},{slot:'lateral',sets:3,reps:[12,20]},{slot:'tri_overhead',sets:2,reps:[10,15]},
     {slot:'curl',sets:2,reps:[10,15]}]},
   FB:{n:'Corps entier B', items:[
     {slot:'hinge',sets:3,reps:[8,12]},{slot:'press_incline',sets:3,reps:[8,12]},{slot:'pull_v',sets:3,reps:[8,12]},
-    {slot:'quad_iso',sets:3,reps:[10,15]},{slot:'rear_delt',sets:3,reps:[12,20]},{slot:'calf',sets:3,reps:[8,15]},
+    {slot:'squat',sets:3,reps:[8,12],pref:'fente_bulgare'},{slot:'rear_delt',sets:3,reps:[12,20]},{slot:'calf',sets:3,reps:[8,15]},
     {slot:'abs',sets:3,reps:[10,15]}]},
   FC:{n:'Corps entier C', items:[
-    {slot:'squat',sets:3,reps:[8,12],pref:'hack'},{slot:'pull_v',sets:3,reps:[8,12],pref:'tirage_neutre'},
+    {slot:'squat',sets:3,reps:[8,12],pref:'presse'},{slot:'pull_v',sets:3,reps:[8,12],pref:'tirage_neutre'},
     {slot:'press_v',sets:3,reps:[8,12]},{slot:'ham_curl',sets:3,reps:[10,15]},{slot:'fly',sets:3,reps:[10,15]},
     {slot:'hammer',sets:2,reps:[10,15]},{slot:'tri_push',sets:2,reps:[10,15]},{slot:'calf',sets:3,reps:[10,20],pref:'mollets_assis'}]}
 };
 const CYCLES = {2:['FA','FB'], 3:['FA','FB','FC'], 4:['UA','LA','UB','LB'], 5:['UA','LA','PA','TA','LB'], 6:['PA','TA','LA','PB','TB','LB']};
 
-/* Conseils dits pendant le repos */
-const TIPS_REST = [
-  'Garde une à deux répétitions en réserve. Les séries proches de l\'échec construisent plus de muscle.',
-  'Prends ton repos en entier. Plus d\'une minute entre les séries donne un peu plus de muscle.',
-  'Une répétition de plus que la dernière fois, c\'est déjà un progrès.',
-  'Cherche l\'étirement complet du muscle en bas du mouvement.',
-  'Le volume compte. Vise au moins dix séries par muscle et par semaine.',
-  'Monter les répétitions ou monter la charge : les deux font grossir le muscle.',
-  'Contrôle la descente, deux à trois secondes. Remonte fort.',
-  'La régularité compte plus que le programme parfait.',
-  'Côté assiette : environ un virgule six gramme de protéines par kilo de poids de corps, chaque jour.',
-  'Machine ou poids libres : le muscle grossit autant. Choisis ce qui est libre et confortable.'
-];
-/* Rappels dits pendant la série */
-const TIPS_SET = [
-  'Contrôle la descente.',
-  'Amplitude complète.',
-  'Respire. Souffle en poussant.',
-  'Reste gainé.',
-  'Les dernières répétitions comptent le plus.'
-];
+/* Phrases du coach. Elles sont enregistrées à l'avance (dossier snd/) : une phrase = un extrait, nommé clé + rang (go0, go1…).
+   Pour changer une phrase, modifie-la ici puis relance tools/make-voice.py. */
+const COACH = {
+  go:   ['C\'est reparti !', 'Allez, on y retourne !', 'Repos terminé. À toi de jouer !', 'On reprend. Concentre-toi !', 'C\'est l\'heure. Série suivante !'],
+  last: ['Dernière série. Donne tout !', 'Dernière série. Finis en beauté !', 'Allez, la dernière. Tout ce qu\'il te reste !'],
+  enc:  ['Allez, tiens bon !', 'Encore deux. Ne lâche rien !', 'C\'est maintenant que ça compte !', 'Allez, allez, allez !',
+         'Reste concentré, jusqu\'au bout !', 'Les dernières répétitions sont celles qui comptent !', 'Ne lâche pas, tu y es presque !',
+         'Respire, et envoie !', 'Serre les dents, encore une !', 'Chaque répétition compte !', 'Tu peux le faire. Vas-y !',
+         'Garde le rythme, c\'est très bien !', 'Plus fort que la dernière fois. Allez !', 'Va chercher une répétition de plus !',
+         'Solide. Continue comme ça !', 'Tu es en train de construire du muscle. Continue !'],
+  ok:   ['Objectif atteint, bravo !', 'Belle série !', 'Excellent travail !', 'Bien joué !'],
+  start:['C\'est parti pour la séance ! Premier exercice.'],
+  next: ['Exercice suivant.'],
+  back: ['On revient sur cet exercice.'],
+  end:  ['Séance terminée. Bravo, beau travail !', 'Séance terminée. Tu as tout donné, bravo !'],
+  light:['Version douce. Descends lentement, sans forcer.'],
+  ten:  ['Dix secondes.'],
+  test: ['Salut, c\'est ton coach. Prêt à tout donner ?']
+};
 
 /* Principes scientifiques affichés dans l'onglet Science */
 const SCIENCE = [
@@ -587,7 +589,7 @@ const SCIENCE = [
 function defaultState(){
   return {v:1, updatedAt:0,
     profile:{days:4, dur:60, bw:null},
-    settings:{voice:true, tips:true, beep:false, audio:'ambient', restC:150, restI:90, rate:1},
+    settings:{voice:true, talk:'normal', vox:'f', vol:1, restC:150, restI:90},
     unavail:{}, pain:{}, prefs:{}, incs:{}, rot:0, cur:null, sessions:[], deleted:{}};
 }
 function r2(x){ return Math.round(x*100)/100; }
@@ -655,7 +657,9 @@ function painLevelFor(ex, pain){ var m=0; for(var k in pain){ if(pain[k]>0 && (e
 function painZonesFor(ex, pain){ var a=[]; for(var k in pain){ if(pain[k]>0 && (ex.j[k]||0)>=2) a.push(k); } return a; }
 
 function candList(S, p){
-  var pref=(S.prefs && S.prefs[p.key]) || p.pref, list=SLOTS[p.slot].slice();
+  var saved=S.prefs && S.prefs[p.key], list=SLOTS[p.slot].slice();
+  if(saved && !(EXI[saved] && (EXI[saved].slot===p.slot || (FALLBACK[p.slot]||[]).indexOf(EXI[saved].slot)>=0))) saved=null;
+  var pref=saved || p.pref;
   if(pref && EXI[pref]) list=[pref].concat(list.filter(function(x){return x!==pref;}));
   return list.map(function(id){return EXI[id];});
 }
@@ -698,6 +702,14 @@ function alternatives(S, cur, it){
   return out;
 }
 
+/* Affecte un exercice à une ligne de séance. Certains exercices ont leur propre fourchette de répétitions. */
+function setEx(it, exId){
+  var e=EXI[exId], b=it.base || {lo:it.tg.lo, hi:it.tg.hi};
+  it.base=b; it.exId=exId;
+  it.tg.lo=(e && e.reps) ? e.reps[0] : b.lo;
+  it.tg.hi=(e && e.reps) ? e.reps[1] : b.hi;
+}
+
 /* ---------- Construction et déroulé de la séance ---------- */
 function buildSession(S, tplId, now){
   var plan=planFor(S,tplId), used={}, items=[];
@@ -707,9 +719,9 @@ function buildSession(S, tplId, now){
     var it={key:p.key, slot:p.slot, tg:{sets:p.sets, lo:p.lo, hi:p.hi}, sets:[], state:'todo', deferred:0,
             exId:null, planId:(base&&base.ex)?base.ex.id:null, light:false, swap:null};
     if(!pk || !pk.ex){
-      it.state='skip'; it.exId=(base&&base.ex)?base.ex.id:SLOTS[p.slot][0]; it.swap=(pk&&pk.skip)?'painskip':'none';
+      it.state='skip'; setEx(it, (base&&base.ex)?base.ex.id:SLOTS[p.slot][0]); it.swap=(pk&&pk.skip)?'painskip':'none';
     } else {
-      it.exId=pk.ex.id; it.light=!!pk.light;
+      setEx(it, pk.ex.id); it.light=!!pk.light;
       if(pk.why==='pain'||pk.why==='light') it.swap=pk.why;
       used[pk.ex.id]=1;
     }
@@ -735,7 +747,7 @@ function usedMap(cur, exceptIdx){
 }
 function planItemOf(cur, it){
   var t=TPL[cur.tplId].items[+it.key.split('|')[1]]||{};
-  return {key:it.key, slot:it.slot, pref:t.pref||null};
+  return {key:it.key, slot:it.slot, pref:(t.slot===it.slot && t.pref) ? t.pref : null};
 }
 /* Passe à l'exercice suivant à faire. Renvoie false quand la séance est finie. */
 function advance(cur){
@@ -763,7 +775,7 @@ function actBusy(S){
   }
   var ex=EXI[it.exId], avoid={}, ex0={}; avoid[ex.st]=1; ex0[it.exId]=1;
   var pk=pickExercise(S, planItemOf(cur,it), {used:usedMap(cur,idx), pain:cur.pain, exclude:ex0, avoidSt:avoid});
-  if(pk && pk.ex){ it.exId=pk.ex.id; it.light=!!pk.light; it.swap='busy'; it.deferred=2; return {type:'replace', old:ex, ex:pk.ex}; }
+  if(pk && pk.ex){ setEx(it, pk.ex.id); it.light=!!pk.light; it.swap='busy'; it.deferred=2; return {type:'replace', old:ex, ex:pk.ex}; }
   it.state='skip'; it.swap='busyskip';
   return {type:'skip', old:ex};
 }
@@ -775,7 +787,7 @@ function actAbsent(S){
     if(x.state!=='todo' || x.sets.length) return;
     var e=EXI[x.exId]; if(isAvail(S,e)) return;
     var pk=pickExercise(S, planItemOf(cur,x), {used:usedMap(cur,i), pain:cur.pain});
-    if(pk && pk.ex){ x.exId=pk.ex.id; x.planId=pk.ex.id; x.light=!!pk.light; x.swap='absent'; changes.push({old:e, ex:pk.ex, current:i===idx}); }
+    if(pk && pk.ex){ setEx(x, pk.ex.id); x.planId=pk.ex.id; x.light=!!pk.light; x.swap='absent'; changes.push({old:e, ex:pk.ex, current:i===idx}); }
     else { x.state='skip'; x.swap='absentskip'; changes.push({old:e, ex:null, current:i===idx}); }
   });
   return {old:ex, changes:changes};
@@ -798,7 +810,7 @@ function actPain(S, pain){
     var pk=pickExercise(S, planItemOf(cur,x), {used:usedMap(cur,i), pain:pain});
     if(!pk || !pk.ex){ x.state='skip'; x.swap='painskip'; out.push({type:'skip', old:e, current:i===curIdx}); return; }
     var changed=pk.ex.id!==x.exId || !!pk.light!==!!x.light;
-    x.exId=pk.ex.id; x.light=!!pk.light;
+    setEx(x, pk.ex.id); x.light=!!pk.light;
     x.swap=(pk.why==='pain'||pk.why==='light') ? pk.why : null;
     if(changed) out.push({type:pk.light?'light':'swap', old:e, ex:pk.ex, current:i===curIdx});
   });
@@ -806,7 +818,7 @@ function actPain(S, pain){
 }
 function actChoose(S, exId, keep){
   var cur=S.cur, it=curItem(cur), ex=EXI[exId];
-  it.exId=exId; it.swap='choice'; it.deferred=2;
+  setEx(it, exId); it.swap='choice'; it.deferred=2;
   it.light=hasPain(cur.pain) && stressOf(ex,cur.pain)>=2;
   if(keep){ S.prefs[it.key]=exId; it.planId=exId; }
   return ex;
@@ -1128,48 +1140,94 @@ var Sync={col:null, ready:false, timer:null, busy:{}, dirty:{},
   remove:function(id){ try{ if(this.col) this.col.doc(id).delete().catch(function(){}); }catch(e){} }
 };
 
-/* ---------- Voix, son, écran ---------- */
-function spNum(x){ var s=fmtKg(x); return s.indexOf(',')>=0 ? s.replace(',',' virgule ') : s; }
-function spLoad(ex, w){
-  if(ex.bw) return w>0 ? 'poids du corps plus '+spNum(w)+' kilos' : 'au poids du corps';
-  return spNum(w)+' kilos'+(ex.per ? (ex.eq==='dumbbell'?' par haltère':' par côté') : '');
-}
-function spRest(sec){ var m=Math.floor(sec/60), s=sec%60; return (m ? m+' minute'+(m>1?'s':'') : '')+(s ? (m?' ':'')+s+(m?'':' secondes') : ''); }
-var Voice={ok:false, v:null,
-  init:function(){
-    var self=this;
+/* ---------- Voix du coach : phrases enregistrées, superposées à la musique ---------- */
+var CACHE='coach-v2';
+/* « ambient » : le son de la page se superpose à celui des autres applications au lieu de le couper.
+   À régler avant de créer le contexte audio. Sur iPhone, ce mode suit le bouton silencieux. */
+function applyAudio(){ try{ if(navigator.audioSession && navigator.audioSession.type!=='ambient') navigator.audioSession.type='ambient'; }catch(e){} }
+function isIOS(){ try{ return /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1); }catch(e){ return false; } }
+function isInstalled(){ try{ return !!(navigator.standalone || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)); }catch(e){ return false; } }
+function voiceOn(){ return !!S.settings.voice && (!!S.settings.force || !(isIOS() && !isInstalled())); }
+var Snd={ctx:null, out:null, index:null, indexDir:null, indexP:null, packs:{}, bufs:{}, queue:[], src:null, gen:0, tail:null, log:[],
+  supported:function(){ return !!(window.AudioContext || window.webkitAudioContext); },
+  dir:function(){ return 'snd/'+(S.settings.vox==='m'?'m':'f')+'/'; },
+  /* À appeler pendant un geste de l'utilisateur : le téléphone n'autorise le son qu'à ce moment-là. */
+  unlock:function(){
+    if(!voiceOn() || !this.supported()) return;
     try{
-      this.ok=('speechSynthesis' in window) && typeof SpeechSynthesisUtterance!=='undefined';
-      if(!this.ok) return;
-      var pick=function(){
-        var vs=window.speechSynthesis.getVoices()||[], fr=vs.filter(function(v){ return /^fr/i.test(v.lang); });
-        self.v=fr.filter(function(v){ return /fr[-_](CH|FR)/i.test(v.lang); })[0] || fr[0] || null;
-      };
-      pick();
-      if(window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener('voiceschanged', pick);
-    }catch(e){ this.ok=false; }
-  },
-  say:function(text, queue){
-    if(!this.ok || !S.settings.voice || !text) return;
-    try{
-      var ss=window.speechSynthesis, u=new SpeechSynthesisUtterance(text), busy=(ss.speaking || ss.pending);
-      u.lang=(this.v && this.v.lang) || 'fr-FR';
-      if(this.v) u.voice=this.v;
-      u.rate=S.settings.rate||1;
-      if(!queue && busy){ ss.cancel(); setTimeout(function(){ try{ ss.speak(u); }catch(e){} }, 90); }
-      else ss.speak(u);
+      applyAudio();
+      if(!this.ctx){
+        var C=window.AudioContext || window.webkitAudioContext, lim;
+        this.ctx=new C(); this.out=this.ctx.createGain(); lim=this.ctx.createDynamicsCompressor();
+        lim.threshold.value=-3; lim.knee.value=0; lim.ratio.value=20; lim.attack.value=0.002; lim.release.value=0.1;
+        this.out.connect(lim); lim.connect(this.ctx.destination);
+      }
+      this.out.gain.value=S.settings.vol||1;
+      if(this.ctx.state!=='running' && this.ctx.resume){ var p=this.ctx.resume(); if(p && p.catch) p.catch(function(){}); }
     }catch(e){}
   },
-  stop:function(){ try{ if(this.ok) window.speechSynthesis.cancel(); }catch(e){} }
+  reset:function(){ this.stop(); this.index=null; this.indexDir=null; this.indexP=null; this.packs={}; this.bufs={}; },
+  loadIndex:function(){
+    var self=this, d=this.dir();
+    if(this.index && this.indexDir===d) return Promise.resolve(this.index);
+    if(this.indexP && this.indexDir===d) return this.indexP;
+    this.indexDir=d; this.index=null;
+    this.indexP=fetch(d+'index.json').then(function(r){ if(!r.ok) throw new Error('index'); return r.json(); }).then(function(j){ if(self.indexDir===d) self.index=j; return j; });
+    this.indexP.catch(function(){ if(self.indexDir===d) self.indexP=null; });
+    return this.indexP;
+  },
+  loadPack:function(pack){
+    var self=this, k=this.dir()+pack;
+    if(this.packs[k]) return this.packs[k];
+    var p=fetch(k+'.mp3').then(function(r){ if(!r.ok) throw new Error('paquet'); return r.arrayBuffer(); });
+    p.catch(function(){ delete self.packs[k]; });
+    return (this.packs[k]=p);
+  },
+  buffer:function(pack, clip){
+    var self=this, k=this.dir()+pack+':'+clip;
+    if(this.bufs[k]) return Promise.resolve(this.bufs[k]);
+    return Promise.all([this.loadIndex(), this.loadPack(pack)]).then(function(r){
+      var o=r[0][pack] && r[0][pack][clip];
+      if(!o || !self.ctx) throw new Error('extrait');
+      var part=r[1].slice(o[0], o[1]);
+      return new Promise(function(res, rej){ var pr=self.ctx.decodeAudioData(part, res, rej); if(pr && pr.catch) pr.catch(function(){}); });
+    }).then(function(b){ self.bufs[k]=b; return b; });
+  },
+  preload:function(packs){
+    var self=this;
+    if(!voiceOn() || !this.supported()) return;
+    this.loadIndex().catch(function(){});
+    packs.forEach(function(p){ self.loadPack(p).catch(function(){}); });
+  },
+  /* say([['coach','go1'],['presse','n']]) dit les extraits à la suite. Avec suite=true, attend la fin de la phrase en cours. */
+  say:function(list, suite){
+    var self=this;
+    if(!list || !list.length) return;
+    this.log.push(list.map(function(x){ return x[0]+':'+x[1]; }).join(' ')); if(this.log.length>80) this.log.shift();
+    if(!voiceOn() || !this.ctx) return;
+    if(!suite) this.stop();
+    var gen=this.gen;
+    this.tail=(this.tail || Promise.resolve()).then(function(){
+      return Promise.all(list.map(function(x){ return self.buffer(x[0], x[1]).catch(function(){ return null; }); }));
+    }).then(function(bufs){
+      if(gen!==self.gen) return;
+      bufs.forEach(function(b){ if(b) self.queue.push(b); });
+      self.pump();
+    }).catch(function(){});
+  },
+  pump:function(){
+    var self=this, s;
+    if(this.src || !this.queue.length || !this.ctx) return;
+    try{
+      if(this.ctx.state!=='running' && this.ctx.resume){ var p=this.ctx.resume(); if(p && p.catch) p.catch(function(){}); }
+      s=this.ctx.createBufferSource(); s.buffer=this.queue.shift(); s.connect(this.out);
+      var done=function(){ if(self.src===s){ self.src=null; self.pump(); } };
+      s.onended=done; this.src=s; s.start();
+      setTimeout(done, s.buffer.duration*1000+1500);          // garde-fou si le téléphone a suspendu le son
+    }catch(e){ this.src=null; }
+  },
+  stop:function(){ this.gen++; this.queue=[]; var s=this.src; this.src=null; try{ if(s){ s.onended=null; s.stop(); } }catch(e){} }
 };
-/* « ambient » demande au téléphone de mélanger le son de la page avec la musique des autres applications */
-function applyAudio(){ try{ if(navigator.audioSession) navigator.audioSession.type=(S.settings.audio==='auto') ? 'auto' : 'ambient'; }catch(e){} }
-var AC=null;
-function unlockBeep(){ if(!S.settings.beep) return; try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==='suspended') AC.resume(); }catch(e){} }
-function beep(){
-  if(!S.settings.beep || !AC) return;
-  try{ var o=AC.createOscillator(), g=AC.createGain(); o.frequency.value=880; g.gain.value=0.15; o.connect(g); g.connect(AC.destination); o.start(); o.stop(AC.currentTime+0.2); }catch(e){}
-}
 var WL=null;
 function wake(){ try{ if(navigator.wakeLock && navigator.wakeLock.request) navigator.wakeLock.request('screen').then(function(l){ WL=l; }, function(){}); }catch(e){} }
 function unwake(){ try{ if(WL){ WL.release(); WL=null; } }catch(e){} }
@@ -1189,14 +1247,60 @@ function ctxOf(){
   var n=it.sets.length, goal=(rec.per[n] && adv.w===rec.w) ? rec.per[n] : null;
   return {cur:cur, it:it, ex:ex, rec:rec, adv:adv, goal:goal};
 }
-function goalSpeech(c){ return c.goal ? 'Vise '+c.goal+' répétitions.' : c.rec.lo+' à '+c.rec.hi+' répétitions.'; }
-function announce(prefix){
-  var c=ctxOf(), t=(prefix||'')+c.ex.n+'. ';
-  if(c.rec.kind==='first' && !c.it.sets.length) t+=c.ex.bw ? 'Première fois. '+c.rec.lo+' à '+c.rec.hi+' répétitions.' : 'Première fois. Choisis ta charge pour '+c.rec.hi+' répétitions, avec 2 en réserve.';
-  else t+='Charge conseillée : '+spLoad(c.ex, c.adv.w)+'. '+goalSpeech(c);
-  if(c.it.light) t+=' Version douce. Descends en 3 secondes.';
-  Voice.say(t);
+/* ---------- Coach : quoi dire et quand ----------
+   Normalement : signal de reprise, un conseil sur l'exercice aux deux premières séries, un encouragement par série.
+   Peu : signal de reprise, un conseil par exercice, un encouragement sur la dernière série. Jamais de chiffres : ils sont à l'écran. */
+function pickLine(key){
+  var n=COACH[key].length, i;
+  if(n<2) return key+'0';
+  S.lines=S.lines||{}; i=Math.floor(Math.random()*n);
+  if(i===S.lines[key]) i=(i+1)%n;
+  S.lines[key]=i; return key+i;
 }
+var Coach={
+  quiet:function(){ return S.settings.talk==='peu'; },
+  clear:function(){ var c=S.cur; if(c){ c.tipAt=null; c.encAt=null; c.tip=null; } },
+  tipFor:function(c, n){
+    if(c.it.light) return n===0 ? ['coach','light0'] : null;
+    if(n===0) return [c.ex.id, (this.quiet() && exHistory(S,c.ex.id).length%2) ? 't2' : 't1'];
+    if(n===1 && !this.quiet()) return [c.ex.id,'t2'];
+    return null;
+  },
+  /* Nom de l'exercice, suivi du conseil si la série peut commencer tout de suite */
+  intro:function(lead, withTip){
+    if(!S.cur) return;
+    var c=ctxOf(), n=c.it.sets.length, a=[], tip=withTip ? this.tipFor(c,n) : null;
+    this.clear();
+    if(lead) a.push(['coach',lead]);
+    a.push([c.ex.id,'n']);
+    if(tip){ a.push(tip); c.cur.tipKey=c.it.key+'#'+c.ex.id+'#'+n; }
+    Snd.preload([c.ex.id]); Snd.say(a);
+  },
+  /* Fin du repos : signal, puis conseil et encouragement programmés pendant la série */
+  go:function(manual){
+    if(!S.cur) return;
+    var c=ctxOf(), cur=c.cur, n=c.it.sets.length, t=now(), last=(c.it.tg.sets>1 && n===c.it.tg.sets-1);
+    this.clear();
+    if(!manual) Snd.say([['coach', pickLine(last?'last':'go')]]);
+    var key=c.it.key+'#'+c.ex.id+'#'+n, tip=(cur.tipKey===key) ? null : this.tipFor(c,n);
+    if(tip){ cur.tipKey=key; cur.tip=tip; cur.tipAt=t+(manual?1200:3800); }
+    var reps=c.goal || Math.round((c.rec.lo+c.rec.hi)/2);
+    if(!this.quiet() || last) cur.encAt=t+1000*Math.max(12, Math.min(30, reps*1.8))+(tip?2500:0);
+  },
+  /* Série validée : un mot si l'objectif est atteint, et le nom de l'exercice suivant */
+  setDone:function(reached, nextEx, back){
+    var a=[];
+    this.clear();
+    if(!this.quiet() && reached) a.push(['coach', pickLine('ok')]);
+    if(nextEx){ Snd.preload([nextEx.id]); if(!this.quiet()){ a.push(['coach', back?'back0':'next0']); a.push([nextEx.id,'n']); } }
+    if(a.length) Snd.say(a); else Snd.stop();
+  },
+  tick:function(t){
+    var cur=S.cur;
+    if(cur.tipAt && t>=cur.tipAt){ if(cur.tip && t-cur.tipAt<20000) Snd.say([cur.tip], true); cur.tipAt=null; cur.tip=null; }
+    if(cur.encAt && t>=cur.encAt){ if(t-cur.encAt<20000) Snd.say([['coach', pickLine('enc')]], true); cur.encAt=null; }
+  }
+};
 function itemNotes(cur, it){
   var plan=(it.planId && it.planId!==it.exId) ? EXI[it.planId] : null, a=[];
   if(it.swap==='pain' && plan) a.push('Remplace « '+plan.n+' » : plus doux pour '+(zonesTxt(painZonesFor(plan,cur.pain))||'la zone sensible')+'.');
@@ -1285,7 +1389,7 @@ function vWorkout(){
     html+='<section class="rest"><div class="eyebrow">Repos</div><div class="t" id="rest-time">'+fmtDur(Math.ceil(left))+'</div><div class="bar"><i id="rest-bar" style="width:'+Math.max(0,Math.min(100,100*(1-left/cur.rest.total)))+'%"></i></div>'
       +'<div class="row"><button class="btn grow" data-act="restadj" data-d="-15">− 15 s</button><button class="btn grow" data-act="restadj" data-d="15">+ 15 s</button></div>'
       +'<button class="btn primary block" data-act="restskip">Reprendre maintenant</button>'
-      +(cur.rest.tipText?'<p class="tip">'+h(cur.rest.tipText)+'</p>':'')+'</section>';
+      +'</section>';
   } else {
     html+='<div class="inputs"><div class="stp"><label for="in-w">'+(ex.bw?'Lest (kg)':'Charge (kg)')+'</label><div><button data-act="step" data-k="w" data-d="-1" aria-label="Moins de charge">−</button><input id="in-w" inputmode="decimal" autocomplete="off" value="'+fmtKg(cur.input.w)+'"><button data-act="step" data-k="w" data-d="1" aria-label="Plus de charge">+</button></div></div>'
       +'<div class="stp"><label for="in-r">Répétitions faites</label><div><button data-act="step" data-k="r" data-d="-1" aria-label="Moins de répétitions">−</button><input id="in-r" inputmode="numeric" autocomplete="off" value="'+cur.input.r+'"><button data-act="step" data-k="r" data-d="1" aria-label="Plus de répétitions">+</button></div></div></div>'
@@ -1302,7 +1406,7 @@ function vWorkout(){
   if(q.length){
     html+='<section class="card"><div class="eyebrow">Ensuite</div><ul class="queue">'+q.map(function(i){ var x=cur.items[i], e=EXI[x.exId]; return '<li><button data-act="jump" data-i="'+i+'"><span>'+h(e.n)+(x.deferred===1?' <span class="pill">en attente</span>':'')+'</span><span class="d num">'+(x.sets.length?x.sets.length+' / ':'')+x.tg.sets+' × '+(x.light?'15–20':x.tg.lo+'–'+x.tg.hi)+'</span></button></li>'; }).join('')+'</ul></section>';
   }
-  html+='<button class="link small" data-act="voicetoggle">Voix du coach : '+(S.settings.voice?(Voice.ok?'activée':'indisponible sur cet appareil'):'coupée')+'. Changer</button>';
+  html+='<button class="link small" data-act="voicetoggle">Voix du coach : '+(S.settings.voice?(!Snd.supported()?'indisponible sur cet appareil':voiceOn()?'activée':'muette ici'):'coupée')+'. Changer</button>';
   return html;
 }
 
@@ -1408,14 +1512,15 @@ function vSettings(){
     +'<div class="set-row"><span>Exercices polyarticulaires</span><span class="row"><button class="btn sm" data-act="setrest" data-k="restC" data-d="-15">−</button><b class="num sw" style="text-align:center">'+fmtRest(st.restC)+'</b><button class="btn sm" data-act="setrest" data-k="restC" data-d="15">+</button></span></div>'
     +'<div class="set-row"><span>Exercices d’isolation</span><span class="row"><button class="btn sm" data-act="setrest" data-k="restI" data-d="-15">−</button><b class="num sw" style="text-align:center">'+fmtRest(st.restI)+'</b><button class="btn sm" data-act="setrest" data-k="restI" data-d="15">+</button></span></div></section>';
   html+='<section class="card"><div class="eyebrow">Coach vocal</div>'
-    +(Voice.ok?'':'<p class="note alert">La synthèse vocale n’est pas disponible dans ce navigateur. Les consignes restent affichées à l’écran.</p>')
+    +(Snd.supported()?'':'<p class="note alert">Ce navigateur ne peut pas lire la voix du coach. Les consignes restent affichées à l’écran.</p>')
+    +((isIOS() && !isInstalled())?'<p class="note alert">Tu n’es pas dans l’application installée. Ici, l’iPhone coupe la musique des autres applications dès qu’une page produit du son. Le coach reste donc muet. Pour l’entendre par-dessus ta musique, ouvre l’application depuis son icône sur l’écran d’accueil.</p><div class="field"><span>Ici, le coach</span>'+segHtml('setforce', st.force?1:0, [[0,'Reste muet'],[1,'Parle quand même']])+'</div>':'')
     +'<div class="field"><span>Voix</span>'+segHtml('setvoice', st.voice?1:0, [[1,'Activée'],[0,'Coupée']])+'</div>'
-    +'<div class="field"><span>Conseils pendant la série et le repos</span>'+segHtml('settips', st.tips?1:0, [[1,'Oui'],[0,'Non']])+'</div>'
-    +'<div class="field"><span>Débit</span>'+segHtml('setrate', st.rate, [[0.9,'Lent'],[1,'Normal'],[1.15,'Rapide']])+'</div>'
-    +'<div class="field"><span>Avec ta musique</span>'+segHtml('setaudio', st.audio, [['ambient','Mélanger'],['auto','Réglage du téléphone']])+'</div>'
-    +'<div class="field"><span>Bip de fin de repos</span>'+segHtml('setbeep', st.beep?1:0, [[0,'Non'],[1,'Oui']])+'</div>'
+    +'<div class="field"><span>Timbre</span>'+segHtml('setvox', st.vox==='m'?'m':'f', [['f','Voix féminine'],['m','Voix masculine']])+'</div>'
+    +'<div class="field"><span>Le coach parle</span>'+segHtml('settalk', st.talk==='peu'?'peu':'normal', [['normal','Normalement'],['peu','Peu']])+'</div>'
+    +'<div class="field"><span>Volume de la voix</span>'+segHtml('setvol', st.vol||1, [[0.6,'Doux'],[1,'Normal'],[1.5,'Fort']])+'</div>'
     +'<button class="btn" data-act="testvoice">Tester la voix</button>'
-    +'<p class="small muted">Lance ta musique dans ton application habituelle, puis reviens ici. « Mélanger » demande au téléphone de superposer la voix à la musique. Sur iPhone, ce mode suit le bouton silencieux : coupe le mode silencieux si tu n’entends rien, ou choisis « Réglage du téléphone ».</p></section>';
+    +'<p class="small muted">Normalement : signal de reprise, un conseil sur l’exercice aux deux premières séries, un encouragement à chaque série. Peu : signal de reprise, un conseil par exercice, un encouragement sur la dernière série. Le coach ne lit plus les charges : elles sont à l’écran.</p>'
+    +'<p class="small muted">La voix est enregistrée et se superpose à ta musique. Lance d’abord ta musique, puis ouvre l’application depuis son icône. Le mode silencieux de l’iPhone coupe la voix du coach : désactive-le.</p></section>';
   var un=Object.keys(S.unavail).filter(function(k){ return S.unavail[k]; });
   html+='<section class="card"><div class="eyebrow">Absent de ma salle</div>';
   if(!un.length) html+='<p class="small muted">Rien pour l’instant. Pendant une séance, touche « Pas dans ma salle » : l’exercice ne sera plus proposé.</p>';
@@ -1517,36 +1622,30 @@ function render(){
 function go(v){ view=v; render(); window.scrollTo(0,0); }
 
 /* ---------- Déroulé ---------- */
-function nextTip(){ S.tipIdx=((S.tipIdx||0)+1)%TIPS_REST.length; return TIPS_REST[S.tipIdx]; }
-function nextCue(ex){ S.cueIdx=((S.cueIdx||0)+1)%(TIPS_SET.length+2); return S.cueIdx<2 ? ex.cues[S.cueIdx+1] : TIPS_SET[S.cueIdx-2]; }
-function startRest(sec, spoken){
-  var cur=S.cur, t=now();
-  cur.rest={start:t, end:t+sec*1000, total:sec, tip:false, ten:false, tipText:S.settings.tips?nextTip():''};
-  cur.cueAt=null;
-  Voice.say(spoken+' Repos : '+spRest(sec)+'.');
+function startRest(sec){
+  var t=now();
+  S.cur.rest={start:t, end:t+sec*1000, total:sec, ten:false};
 }
 function endRest(manual){
   var cur=S.cur; if(!cur || !cur.rest) return;
-  cur.rest=null; cur.cueAt=now()+15000;
-  var c=ctxOf(), n=c.it.sets.length;
-  Voice.say((manual?'':'C’est reparti. ')+(n===0 ? c.ex.n+'. ' : '')+'Série '+(n+1)+'. '+((c.rec.kind==='first'&&!n) ? 'Choisis ta charge.' : spLoad(c.ex, cur.input.w)+'. '+goalSpeech(c)));
-  if(!manual) beep();
+  cur.rest=null;
   saveLocal(); render();
+  Coach.go(manual);
 }
 function doFinish(){
   var t=now(), se=finishSession(S, t);
   unwake(); closeSheet();
-  if(!se){ save(); view='home'; render(); toast('Aucune série saisie : la séance n’a pas été enregistrée.'); Voice.stop(); return; }
+  if(!se){ save(); view='home'; render(); toast('Aucune série saisie : la séance n’a pas été enregistrée.'); Snd.stop(); return; }
   save('session', se);
   ui.reportId=se.id; view='report'; render(); window.scrollTo(0,0);
-  var rep=buildReport(S,se);
-  Voice.say('Séance terminée. '+rep.nSets+' séries en '+rep.durMin+' minutes. '+rep.verdict+'.'+(rep.prs?' '+rep.prs+' record'+(rep.prs>1?'s':'')+'.':'')+' Ton rapport est à l’écran.');
+  Snd.say([['coach', pickLine('end')]]);
 }
-function afterChange(prefix){
+function afterChange(){
   var cur=S.cur;
   if(curItem(cur).state!=='todo'){ if(!advance(cur)){ doFinish(); return; } }
-  cur.input=null; save(); render(); announce(prefix||'');
+  cur.input=null; save(); render(); Coach.intro(null, !cur.rest);
 }
+function sessionPacks(cur){ return ['coach'].concat(cur.items.map(function(it){ return it.exId; })); }
 function tick(){
   if(!S || !S.cur || view!=='workout') return;
   var cur=S.cur, t=now(), el=$('chrono');
@@ -1555,13 +1654,9 @@ function tick(){
     var left=(cur.rest.end-t)/1000, rt=$('rest-time'), rb=$('rest-bar');
     if(rt) rt.textContent=fmtDur(Math.ceil(left));
     if(rb) rb.style.width=Math.max(0,Math.min(100,100*(1-left/cur.rest.total)))+'%';
-    if(cur.rest.tipText && !cur.rest.tip && t-cur.rest.start>20000 && left>22){ cur.rest.tip=true; Voice.say(cur.rest.tipText, true); }
-    if(!cur.rest.ten && left<=10 && left>5 && cur.rest.total>=40){ cur.rest.ten=true; Voice.say('Dix secondes.', true); }
+    if(!cur.rest.ten && left<=10 && left>5 && cur.rest.total>=40){ cur.rest.ten=true; if(!Coach.quiet()) Snd.say([['coach','ten0']], true); }
     if(left<=0) endRest(false);
-  } else if(cur.cueAt && t>=cur.cueAt){
-    cur.cueAt=null;
-    if(S.settings.tips) Voice.say(nextCue(EXI[curItem(cur).exId]), true);
-  }
+  } else Coach.tick(t);
 }
 function readInputs(){
   var cur=S.cur; if(!cur || !cur.input) return;
@@ -1582,12 +1677,12 @@ var ACT={
   start:function(){
     var cur=buildSession(S, todayTpl(S), now());
     if(!remaining(cur)){ toast('Aucun exercice possible avec les réglages actuels. Vérifie les zones sensibles et les machines absentes.'); return; }
-    S.cur=cur; view='workout'; wake(); applyAudio(); unlockBeep(); preload(cur);
+    S.cur=cur; view='workout'; wake(); Snd.unlock(); preload(cur); Snd.preload(sessionPacks(cur));
     save(); render(); window.scrollTo(0,0);
-    announce('Séance '+cur.name+'. Premier exercice : ');
-    cur.cueAt=null;
+    Coach.intro('start0', true);
+    if(S.settings.voice && !voiceOn()) toast('Coach muet ici : dans ce navigateur, l’iPhone couperait ta musique. Ouvre l’application depuis son icône sur l’écran d’accueil.', 8000);
   },
-  resume:function(){ view='workout'; wake(); applyAudio(); unlockBeep(); preload(S.cur); render(); window.scrollTo(0,0); },
+  resume:function(){ view='workout'; wake(); Snd.unlock(); preload(S.cur); Snd.preload(sessionPacks(S.cur)); render(); window.scrollTo(0,0); },
   pick:function(){ openSheet('pick'); },
   pickset:function(d){ S.rot=+d.i; closeSheet(); save(); render(); },
   report:function(d){ ui.reportId=d.id; go('report'); },
@@ -1606,19 +1701,13 @@ var ACT={
   logset:function(){
     var c=ctxOf(), cur=c.cur, inp=cur.input;
     if(!(inp.r>0)){ toast('Indique le nombre de répétitions faites.'); return; }
-    unlockBeep();
-    var lo=c.rec.lo, hi=c.rec.hi, fb=inp.r>hi ? 'Au-dessus de la fourchette.' : inp.r<lo ? 'Sous la fourchette.' : (c.goal && inp.r>=c.goal) ? 'Objectif atteint.' : 'Bien.';
+    var reached=c.goal ? inp.r>=c.goal : inp.r>=c.rec.hi;
     var res=logSet(S, {w:inp.w, r:inp.r, rir:inp.rir}, now()), sec=c.it.light ? Math.min(90, restFor(S,c.ex)) : restFor(S,c.ex);
-    if(res.finished){
-      if(!advance(cur)){ doFinish(); return; }
-      cur.input=null;
-      startRest(sec, fb+' Exercice terminé. Ensuite : '+EXI[curItem(cur).exId].n+'.');
-    } else {
-      cur.input=null;
-      startRest(sec, inp.r+' répétitions. '+fb);
-    }
+    if(res.finished && !advance(cur)){ doFinish(); return; }
+    cur.input=null; startRest(sec);
+    Coach.setDone(reached, res.finished ? EXI[curItem(cur).exId] : null, res.finished && curItem(cur).deferred===1);
     save(); render();
-    var top=$('demo'); if(res.finished && top) window.scrollTo(0,0);
+    if(res.finished) window.scrollTo(0,0);
   },
   restadj:function(d){ var r=S.cur.rest; if(!r) return; r.end+=(+d.d)*1000; r.total=Math.max(15, r.total+(+d.d)); if(r.end<now()) r.end=now(); saveLocal(); tick(); },
   restskip:function(){ endRest(true); },
@@ -1630,15 +1719,15 @@ var ACT={
   ackfree:function(){ curItem(S.cur).deferred=2; save(); render(); },
   busy:function(){
     var r=actBusy(S);
-    if(r.type==='defer'){ toast('OK. On fait d’abord « '+EXI[r.next.exId].n+' ». Je te repropose « '+EXI[r.it.exId].n+' » juste après.', 6000); afterChange('D’accord. On fait d’abord '); }
-    else if(r.type==='replace'){ toast('Remplacé pour aujourd’hui par « '+r.ex.n+' ». « '+r.old.n+' » reste dans ton programme.', 6000); afterChange('Remplacé pour aujourd’hui. '); }
-    else { toast('Pas d’autre exercice libre pour ce muscle. On passe au suivant.', 5000); afterChange('On passe. '); }
+    if(r.type==='defer'){ toast('OK. On fait d’abord « '+EXI[r.next.exId].n+' ». Je te repropose « '+EXI[r.it.exId].n+' » juste après.', 6000); afterChange(); }
+    else if(r.type==='replace'){ toast('Remplacé pour aujourd’hui par « '+r.ex.n+' ». « '+r.old.n+' » reste dans ton programme.', 6000); afterChange(); }
+    else { toast('Pas d’autre exercice libre pour ce muscle. On passe au suivant.', 5000); afterChange(); }
   },
   absent:function(){
     var r=actAbsent(S), mine=r.changes.filter(function(x){ return x.current; })[0];
     if(mine && mine.ex) toast('Noté : « '+r.old.n+' » ne sera plus proposé. À la place : « '+mine.ex.n+' ».', 6000);
     else toast('Noté. Aucun autre exercice disponible pour ce muscle : on passe au suivant.', 6000);
-    afterChange('Noté. À la place : ');
+    afterChange();
   },
   pain:function(){ ui.painDraft=clone(S.pain||{}); openSheet('pain'); },
   painset:function(d){ ui.painDraft[d.z]=+d.v; renderSheet(); },
@@ -1650,20 +1739,20 @@ var ACT={
     ch.forEach(function(x){ if(x.type==='swap') sw++; else if(x.type==='light') li++; else sk++; });
     var parts=[]; if(sw) parts.push(plural(sw,'exercice')+' remplacé'+(sw>1?'s':'')); if(li) parts.push(li+' allégé'+(li>1?'s':'')); if(sk) parts.push(sk+' écarté'+(sk>1?'s':''));
     toast(parts.length ? 'Séance adaptée : '+parts.join(', ')+'.' : (hasPain(p) ? 'Noté. Aucun exercice restant ne charge cette zone.' : 'Programme normal rétabli.'), 6000);
-    afterChange(parts.length ? 'Séance adaptée. ' : '');
+    afterChange();
   },
   alt:function(){ ui.keep=true; openSheet('alt'); },
   altkeep:function(d){ ui.keep=(+d.v===1); renderSheet(); },
-  altpick:function(d){ var ex=actChoose(S, d.id, ui.keep); closeSheet(); toast('Exercice choisi : « '+ex.n+' »'+(ui.keep?', gardé pour les prochaines séances.':', pour aujourd’hui.')); afterChange(''); },
+  altpick:function(d){ var ex=actChoose(S, d.id, ui.keep); closeSheet(); toast('Exercice choisi : « '+ex.n+' »'+(ui.keep?', gardé pour les prochaines séances.':', pour aujourd’hui.')); afterChange(); },
   addset:function(){ var it=curItem(S.cur); if(it.tg.sets>=8) return; it.tg.sets++; save(); render(); toast('Une série ajoutée : '+it.tg.sets+' au total.'); },
-  skip:function(){ actSkip(S); afterChange('Exercice suivant : '); },
-  jump:function(d){ var cur=S.cur, p=cur.order.indexOf(+d.i); if(p<0) return; cur.pos=p; cur.rest=null; cur.input=null; save(); render(); window.scrollTo(0,0); announce(''); },
-  voicetoggle:function(){ S.settings.voice=!S.settings.voice; if(!S.settings.voice) Voice.stop(); save(); render(); if(S.settings.voice) Voice.say('Voix activée.'); },
+  skip:function(){ actSkip(S); afterChange(); },
+  jump:function(d){ var cur=S.cur, p=cur.order.indexOf(+d.i); if(p<0) return; cur.pos=p; cur.rest=null; cur.input=null; save(); render(); window.scrollTo(0,0); Coach.intro(null, true); },
+  voicetoggle:function(){ S.settings.voice=!S.settings.voice; if(voiceOn()){ Snd.unlock(); Snd.preload(sessionPacks(S.cur)); Snd.say([['coach','test0']]); } else Snd.stop(); save(); render(); },
   quit:function(){ openSheet('quit'); },
-  pause:function(){ closeSheet(); unwake(); Voice.stop(); go('home'); },
+  pause:function(){ closeSheet(); unwake(); Snd.stop(); go('home'); },
   finish:function(){ if(remaining(S.cur)>0) openSheet('finish'); else doFinish(); },
   finishnow:function(){ doFinish(); },
-  abandon:function(){ S.cur=null; closeSheet(); unwake(); Voice.stop(); save(); go('home'); toast('Séance abandonnée. Rien n’a été enregistré.'); },
+  abandon:function(){ S.cur=null; closeSheet(); unwake(); Snd.stop(); save(); go('home'); toast('Séance abandonnée. Rien n’a été enregistré.'); },
   copyreport:function(){
     var se=null; S.sessions.forEach(function(s){ if(s.id===ui.reportId) se=s; }); if(!se) return;
     var isLast=S.sessions[S.sessions.length-1]===se;
@@ -1675,16 +1764,16 @@ var ACT={
   setdays:function(d){ S.profile.days=+d.v; S.rot=0; save(); render(); },
   setdur:function(d){ S.profile.dur=+d.v; save(); render(); },
   setrest:function(d){ S.settings[d.k]=Math.max(30, Math.min(300, (S.settings[d.k]||90)+(+d.d))); save(); render(); },
-  setvoice:function(d){ S.settings.voice=(+d.v===1); if(!S.settings.voice) Voice.stop(); save(); render(); },
-  settips:function(d){ S.settings.tips=(+d.v===1); save(); render(); },
-  setrate:function(d){ S.settings.rate=+d.v; save(); render(); },
-  setaudio:function(d){ S.settings.audio=d.v; applyAudio(); save(); render(); },
-  setbeep:function(d){ S.settings.beep=(+d.v===1); unlockBeep(); save(); render(); if(S.settings.beep) beep(); },
+  setvoice:function(d){ S.settings.voice=(+d.v===1); if(S.settings.voice) Snd.unlock(); else Snd.stop(); save(); render(); },
+  setforce:function(d){ S.settings.force=(+d.v===1); if(!voiceOn()) Snd.stop(); save(); render(); },
+  settalk:function(d){ S.settings.talk=(d.v==='peu')?'peu':'normal'; save(); render(); },
+  setvox:function(d){ Snd.reset(); S.settings.vox=(d.v==='m')?'m':'f'; save(); render(); ACT.testvoice(); warmCache(); },
+  setvol:function(d){ S.settings.vol=+d.v; save(); render(); ACT.testvoice(); },
   testvoice:function(){
-    applyAudio();
-    if(!Voice.ok){ toast('La synthèse vocale n’est pas disponible dans ce navigateur.'); return; }
+    if(!Snd.supported()){ toast('Ce navigateur ne peut pas lire la voix du coach.'); return; }
     if(!S.settings.voice){ toast('La voix est coupée. Active-la d’abord.'); return; }
-    Voice.say('Bonjour. Je suis ton coach. Série 2. 42 virgule 5 kilos. Vise 10 répétitions.');
+    if(!voiceOn()){ toast('Ici, le coach reste muet pour ne pas couper ta musique. Ouvre l’application depuis son icône, ou choisis « Parle quand même ».', 7000); return; }
+    Snd.unlock(); Snd.preload(['coach']); Snd.say([['coach','test0']]);
   },
   restore:function(d){ delete S.unavail[d.k]; save(); render(); toast('Exercice remis dans le programme.'); },
   export:function(){ copyText(JSON.stringify(S), 'Données copiées. Colle-les dans une note pour les garder.', 'Mes données'); },
@@ -1713,7 +1802,7 @@ document.addEventListener('click', function(e){
   var el=e.target.closest ? e.target.closest('[data-act]') : null;
   if(!el || el.disabled) return;
   var a=el.getAttribute('data-act');
-  if(view==='workout' && !ui.sheet && a!=='step') readInputs();
+  if(view==='workout'){ Snd.unlock(); if(!ui.sheet && a!=='step') readInputs(); }
   if(ACT[a]) ACT[a](el.dataset, el, e);
 });
 document.addEventListener('change', function(e){
@@ -1732,23 +1821,30 @@ function canInstall(){
   try{ return !inClaude() && !framed() && !(navigator.standalone || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)); }
   catch(e){ return false; }
 }
+/* Garde les photos et la voix choisie sur le téléphone, pour la salle sans réseau. */
+function warmCache(){
+  try{
+    if(!window.caches || framed() || inClaude()) return;
+    var vox=(S.settings.vox==='m')?'m':'f', k='coach-cache', v=CACHE+':'+vox+':'+EX.length;
+    try{ if(localStorage.getItem(k)===v) return; }catch(e){}
+    window.caches.open(CACHE).then(function(c){
+      var urls=EX.map(function(e){ return 'img/'+e.id+'.jpg'; })
+        .concat(['snd/'+vox+'/index.json', 'snd/'+vox+'/coach.mp3'], EX.map(function(e){ return 'snd/'+vox+'/'+e.id+'.mp3'; })), i=0;
+      (function next(){
+        if(i>=urls.length){ try{ localStorage.setItem(k,v); }catch(e){} return; }
+        var u=urls[i++];
+        c.match(u).then(function(hit){ return hit || c.add(u); }).then(next, next);
+      })();
+    });
+  }catch(e){}
+}
 function initOffline(){
   try{
     if(!('serviceWorker' in navigator) || framed() || inClaude()) return;
     if(location.protocol!=='https:' && location.hostname!=='localhost' && location.hostname!=='127.0.0.1') return;
     navigator.serviceWorker.register('sw.js').then(function(){
       try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
-      var k='coach-photos', v='1';
-      try{ if(localStorage.getItem(k)===v) return; }catch(e){}
-      if(!window.caches) return;
-      window.caches.open('coach-v1').then(function(c){            // garde toutes les photos pour la salle sans réseau
-        var ids=EX.map(function(e){ return e.id; }), i=0;
-        (function next(){
-          if(i>=ids.length){ try{ localStorage.setItem(k,v); }catch(e){} return; }
-          var u='img/'+ids[i++]+'.jpg';
-          c.match(u).then(function(hit){ return hit || c.add(u); }).then(next, next);
-        })();
-      });
+      warmCache();
     }).catch(function(){});
   }catch(e){}
 }
@@ -1756,7 +1852,7 @@ function initOffline(){
 /* ---------- Démarrage ---------- */
 (function(){
   S=normalize(loadLocal());
-  Voice.init(); applyAudio();
+  applyAudio();
   view='home';
   render();
   setInterval(tick, 500);

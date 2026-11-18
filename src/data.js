@@ -30,7 +30,7 @@ X('di_smith','Développé incliné barre guidée','pecs',['triceps','epaules'],'
 X('di_barre','Développé incliné barre','pecs',['triceps','epaules'],'press_incline','inclinebar','barbell','c',2.5,{ep:3,co:2,po:2},'Barbell_Incline_Bench_Press_-_Medium_Grip',
   ['Banc incliné à 30°, prise un peu plus large que les épaules.','Descends la barre sous les clavicules.','Garde les fesses sur le banc.'],{start:30});
 X('pecdeck','Pec deck (butterfly)','pecs',[],'fly','pecdeck','machine','i',5,{ep:2},'Butterfly',
-  ['Siège réglé : coudes à hauteur d\'épaules.','Ramène les bras devant toi, serre une seconde.','Reviens lentement jusqu\'à sentir l\'étirement des pectoraux.'],{start:25});
+  ['Siège réglé : coudes à hauteur d\'épaules.','Ramène les bras devant toi, serre une seconde.','Reviens lentement jusqu\'à sentir l\'étirement des pectoraux.'],{start:25,say:'Pec deck'});
 X('ecarte_poulie','Écarté à la poulie vis-à-vis','pecs',[],'fly','cable','cable','i',2.5,{ep:2,co:1},'Cable_Crossover',
   ['Poulies hautes, un pied devant, buste légèrement penché.','Ramène les mains devant toi, coudes légèrement fléchis.','Laisse les bras s\'ouvrir lentement au retour.'],{per:1,start:10});
 X('ecarte_poulie_basse','Écarté poulie basse','pecs',[],'fly','cable','cable','i',2.5,{ep:1,co:1},'Low_Cable_Crossover',
@@ -72,7 +72,7 @@ X('de_machine','Développé épaules machine','epaules',['triceps'],'press_v','s
 X('de_neutre','Développé épaules haltères, prise neutre','epaules',['triceps'],'press_v','dumbbell','dumbbell','c',2,{ep:1,co:1,po:1,do:1},'Standing_Palms-In_Dumbbell_Press',
   ['Haltères devant les épaules, paumes face à face.','Pousse vers le haut, coudes vers l\'avant.','Cette prise est plus douce pour l\'épaule.'],{per:1,start:10});
 X('de_smith','Développé épaules barre guidée','epaules',['triceps'],'press_v','smith','smith','c',2.5,{ep:2,co:1,po:2,do:1},'Smith_Machine_Overhead_Shoulder_Press',
-  ['Assis sous la barre guidée, barre au niveau du menton.','Pousse au-dessus de la tête.','Coudes sous la barre.'],{start:20});
+  ['Assis sous la barre guidée, barre au niveau du menton.','Pousse au-dessus de la tête.','Garde les coudes sous la barre.'],{start:20});
 X('de_barre','Développé militaire barre','epaules',['triceps'],'press_v','barbell','barbell','c',2.5,{ep:3,co:1,po:2,do:2,nu:1},'Standing_Military_Press',
   ['Debout, barre sur le haut de la poitrine, ventre gainé.','Pousse la barre au-dessus de la tête.','Serre les fessiers pour ne pas cambrer.'],{start:30});
 X('lat_halt','Élévations latérales haltères','epaules',[],'lateral','dumbbell','dumbbell','i',1,{ep:2,po:1,nu:1},'Side_Lateral_Raise',
@@ -104,9 +104,9 @@ X('curl_pupitre_machine','Curl pupitre machine','biceps',[],'curl','curlmachine'
 X('curl_pupitre','Curl pupitre barre EZ','biceps',[],'curl','preacher','barbell','i',2.5,{co:2,po:1},'Preacher_Curl',
   ['Bras sur le pupitre, barre EZ en mains.','Monte la barre vers les épaules.','Descends lentement, sans décoller les coudes.'],{start:15});
 X('curl_halt','Curl haltères debout','biceps',[],'curl','dumbbell','dumbbell','i',1,{co:1,po:1},'Dumbbell_Bicep_Curl',
-  ['Debout, haltères le long du corps.','Monte en tournant les paumes vers le haut.','Coudes fixes.'],{per:1,start:9});
+  ['Debout, haltères le long du corps.','Monte en tournant les paumes vers le haut.','Garde les coudes fixes.'],{per:1,start:9});
 X('curl_marteau','Curl marteau','biceps',[],'hammer','dumbbell','dumbbell','i',1,{co:1},'Hammer_Curls',
-  ['Haltères le long du corps, paumes face à face.','Monte sans tourner les poignets.','Coudes collés au buste.'],{per:1,start:10});
+  ['Haltères le long du corps, paumes face à face.','Monte sans tourner les poignets.','Garde les coudes collés au buste.'],{per:1,start:10});
 X('curl_marteau_corde','Curl marteau à la corde','biceps',[],'hammer','cable','cable','i',2.5,{co:1},'Cable_Hammer_Curls_-_Rope_Attachment',
   ['Poulie basse, corde, paumes face à face.','Monte la corde vers les épaules.','Coudes fixes, descends lentement.'],{start:20});
 X('curl_inverse','Curl inversé barre EZ','biceps',[],'hammer','ezbar','barbell','i',2.5,{co:2,po:2},'Reverse_Barbell_Curl',
@@ -118,13 +118,13 @@ X('tri_corde_haut','Extension triceps au-dessus de la tête, poulie','triceps',[
 X('tri_halt_haut','Extension triceps haltère au-dessus de la tête','triceps',[],'tri_overhead','dumbbell','dumbbell','i',2,{ep:2,co:2,po:1},'Seated_Triceps_Press',
   ['Assis, un haltère tenu à deux mains au-dessus de la tête.','Descends derrière la nuque, coudes vers le plafond.','Tends les bras sans écarter les coudes.'],{start:14});
 X('barre_front','Barre au front (barre EZ)','triceps',[],'tri_overhead','ezbar','barbell','i',2.5,{ep:1,co:3,po:1},'EZ-Bar_Skullcrusher',
-  ['Allongé, barre au-dessus du front, bras tendus.','Fléchis les coudes, descends la barre vers le front.','Coudes fixes et serrés.'],{start:20});
+  ['Allongé, barre au-dessus du front, bras tendus.','Fléchis les coudes, descends la barre vers le front.','Garde les coudes fixes et serrés.'],{start:20,say:'Barre au front'});
 X('tri_corde','Extension triceps poulie haute, corde','triceps',[],'tri_push','cable','cable','i',2.5,{co:2,po:1},'Triceps_Pushdown_-_Rope_Attachment',
   ['Face à la poulie haute, coudes collés au corps.','Tends les bras vers le bas, écarte la corde en bas.','Remonte jusqu\'à la poitrine.'],{start:20});
 X('tri_barre','Extension triceps poulie haute, barre','triceps',[],'tri_push','cable','cable','i',2.5,{co:2,po:2},'Triceps_Pushdown',
-  ['Face à la poulie haute, barre en mains.','Pousse vers le bas jusqu\'aux bras tendus.','Coudes immobiles.'],{start:25});
+  ['Face à la poulie haute, barre en mains.','Pousse vers le bas jusqu\'aux bras tendus.','Garde les coudes immobiles.'],{start:25});
 X('tri_machine','Extension triceps machine','triceps',[],'tri_push','trimachine','machine','i',5,{co:2,po:1},'Machine_Triceps_Extension',
-  ['Bras sur l\'appui, poignées en mains.','Tends les bras.','Reviens lentement, coudes fixes.'],{start:20});
+  ['Bras sur l\'appui, poignées en mains.','Tends les bras jusqu\'au bout.','Reviens lentement, coudes fixes.'],{start:20});
 X('dips_machine','Dips machine','triceps',['pecs','epaules'],'tri_push','dipmachine','machine','c',5,{ep:2,co:2,po:1},'Dip_Machine',
   ['Assis, mains sur les poignées, coudes vers l\'arrière.','Pousse vers le bas jusqu\'aux bras tendus.','Remonte en contrôlant.'],{start:40});
 X('dips','Dips aux barres parallèles','triceps',['pecs','epaules'],'tri_push','dipbars','body','c',2.5,{ep:3,co:2,po:2},'Dips_-_Triceps_Version',
@@ -168,11 +168,11 @@ X('hip_thrust','Hip thrust barre','fessiers',['ischios'],'glute','barbell','barb
 X('kick_poulie','Kickback fessier à la poulie','fessiers',[],'glute','cable','cable','i',2.5,{do:1,ha:1},'One-Legged_Cable_Kickback',
   ['Sangle à la cheville, face à la poulie basse.','Pousse la jambe vers l\'arrière.','Ne cambre pas le dos.'],{per:1,start:10});
 X('abducteurs','Abducteurs machine','fessiers',[],'glute','abductor','machine','i',5,{ha:1},'Thigh_Abductor',
-  ['Assis, coussins à l\'extérieur des genoux.','Écarte les jambes.','Reviens lentement.'],{start:30});
+  ['Assis, coussins à l\'extérieur des genoux.','Écarte les jambes le plus loin possible.','Reviens lentement, sans lâcher la tension.'],{start:30});
 X('leg_curl_assis','Leg curl assis','ischios',[],'ham_curl','legcurlseated','machine','i',5,{ge:1},'Seated_Leg_Curl',
   ['Dossier réglé, coussin au-dessus des talons.','Ramène les talons sous le siège.','Remonte lentement jusqu\'aux jambes tendues.'],{start:30});
 X('leg_curl_allonge','Leg curl allongé','ischios',[],'ham_curl','legcurllying','machine','i',5,{ge:1,do:1},'Lying_Leg_Curls',
-  ['À plat ventre, coussin au-dessus des talons.','Ramène les talons vers les fessiers.','Hanches collées au banc.'],{start:25});
+  ['À plat ventre, coussin au-dessus des talons.','Ramène les talons vers les fessiers.','Garde les hanches collées au banc.'],{start:25});
 X('leg_curl_debout','Leg curl debout','ischios',[],'ham_curl','legcurlstanding','machine','i',2.5,{ge:1},'Standing_Leg_Curl',
   ['Debout, une jambe calée.','Ramène le talon vers la fesse.','Contrôle la descente.'],{per:1,start:10});
 
@@ -182,21 +182,23 @@ X('mollets_debout','Mollets debout machine','mollets',[],'calf','calfstanding','
 X('mollets_presse','Mollets à la presse','mollets',[],'calf','legpress','machine','i',10,{ch:2},'Calf_Press_On_The_Leg_Press_Machine',
   ['Avant des pieds en bas du plateau.','Pousse avec les pointes de pieds.','Laisse les talons revenir loin : étirement complet.'],{start:60});
 X('mollets_assis','Mollets assis machine','mollets',[],'calf','calfseated','machine','i',5,{ch:2},'Seated_Calf_Raise',
-  ['Assis, coussins sur les genoux.','Monte les talons.','Descends lentement jusqu\'à l\'étirement.'],{start:20});
+  ['Assis, coussins sur les genoux.','Monte les talons le plus haut possible.','Descends lentement jusqu\'à l\'étirement.'],{start:20});
 X('mollets_smith','Mollets debout barre guidée','mollets',[],'calf','smith','smith','i',5,{ch:2,do:1},'Smith_Machine_Calf_Raise',
-  ['Barre guidée sur les trapèzes, pointes sur une cale.','Monte sur les pointes.','Étirement complet en bas.'],{start:40});
+  ['Barre guidée sur les trapèzes, pointes sur une cale.','Monte sur les pointes de pieds.','Étirement complet en bas.'],{start:40});
 X('mollets_halt','Mollets debout sur une jambe, haltère','mollets',[],'calf','dumbbell','dumbbell','i',2,{ch:2},'Standing_Dumbbell_Calf_Raise',
-  ['Un pied sur une marche, haltère dans la main du même côté.','Monte sur la pointe.','Descends le talon sous la marche.'],{start:10});
+  ['Un pied sur une marche, haltère dans la main du même côté.','Monte sur la pointe du pied.','Descends le talon sous la marche.'],{start:10});
 
 // ---------- Abdominaux
+X('dragon_flag','Relevé de jambes sur banc, descente dragon flag','abdos',[],'abs','body','body','i',2.5,{do:2,ep:1,nu:1,ha:1},'Flat_Bench_Lying_Leg_Raise',
+  ['Allongé sur un banc, mains agrippées au banc derrière la tête.','Monte les jambes tendues, puis décolle le bassin vers le plafond.','Redescends lentement, corps gainé et aligné, sans cambrer le bas du dos.'],{bw:1,noload:1,reps:[6,12],say:'Relevé de jambes sur banc'});
 X('crunch_poulie','Crunch à la poulie haute','abdos',[],'abs','cable','cable','i',2.5,{do:2,nu:1},'Cable_Crunch',
   ['À genoux face à la poulie haute, corde près des tempes.','Enroule le buste vers les genoux.','Les hanches ne bougent pas.'],{start:25});
 X('crunch_machine','Crunch machine','abdos',[],'abs','abmachine','machine','i',5,{do:2,nu:1},'Ab_Crunch_Machine',
-  ['Assis, pieds calés, poignées en mains.','Enroule le buste vers l\'avant.','Reviens lentement.'],{start:25});
+  ['Assis, pieds calés, poignées en mains.','Enroule le buste vers l\'avant.','Reviens lentement, sans lâcher la tension.'],{start:25});
 X('releve_genoux','Relevé de genoux à la chaise romaine','abdos',[],'abs','captain','body','i',2.5,{do:1,ep:1,ha:2},'Knee_Hip_Raise_On_Parallel_Bars',
   ['Avant-bras sur les appuis, dos contre le dossier.','Monte les genoux vers la poitrine.','Enroule le bassin en haut.'],{bw:1,noload:1});
 X('releve_jambes','Relevé de jambes suspendu','abdos',[],'abs','pullupbar','body','i',2.5,{do:1,ep:2,ha:2,po:1},'Hanging_Leg_Raise',
-  ['Suspendu à la barre, bras tendus.','Monte les jambes à l\'horizontale.','Sans balancer.'],{bw:1,noload:1});
+  ['Suspendu à la barre, bras tendus.','Monte les jambes à l\'horizontale.','Monte sans te balancer.'],{bw:1,noload:1});
 X('crunch_sol','Crunch au sol','abdos',[],'abs','body','body','i',2.5,{do:1,nu:2},'Crunches',
   ['Allongé, genoux fléchis, mains aux tempes.','Décolle les épaules en enroulant le buste.','Ne tire pas sur la nuque.'],{bw:1,noload:1});
 X('dead_bug','Dead bug','abdos',[],'abs','body','body','i',2.5,{ep:1,ha:1},'Dead_Bug',
@@ -225,7 +227,7 @@ const SLOTS = {
   glute:['hip_thrust','kick_poulie','abducteurs'],
   ham_curl:['leg_curl_assis','leg_curl_allonge','leg_curl_debout'],
   calf:['mollets_debout','mollets_presse','mollets_assis','mollets_smith','mollets_halt'],
-  abs:['crunch_poulie','crunch_machine','releve_genoux','releve_jambes','crunch_sol','dead_bug']
+  abs:['dragon_flag','crunch_poulie','crunch_machine','releve_genoux','releve_jambes','crunch_sol','dead_bug']
 };
 /* Créneaux voisins : même muscle, autre mouvement. Servent quand rien ne convient dans le créneau. */
 const FALLBACK = {
@@ -244,17 +246,19 @@ const TPL = {
     {slot:'pull_v',sets:3,reps:[8,12]},{slot:'lateral',sets:3,reps:[12,20]},{slot:'tri_overhead',sets:3,reps:[10,15]},
     {slot:'curl',sets:3,reps:[10,15]}]},
   LA:{n:'Bas du corps A', items:[
-    {slot:'squat',sets:3,reps:[6,10]},{slot:'hinge',sets:3,reps:[8,12]},{slot:'quad_iso',sets:3,reps:[10,15]},
-    {slot:'ham_curl',sets:3,reps:[10,15]},{slot:'calf',sets:4,reps:[8,15]},{slot:'abs',sets:3,reps:[10,15]}]},
+    {slot:'squat',sets:3,reps:[6,10],pref:'presse'},{slot:'squat',sets:3,reps:[8,12],pref:'fente_bulgare'},
+    {slot:'hinge',sets:3,reps:[8,12]},{slot:'ham_curl',sets:3,reps:[10,15]},
+    {slot:'calf',sets:4,reps:[8,15]},{slot:'abs',sets:3,reps:[10,15]}]},
   UB:{n:'Haut du corps B', items:[
     {slot:'pull_v',sets:3,reps:[8,12],pref:'tirage_neutre'},{slot:'press_incline',sets:3,reps:[8,12],pref:'di_machine'},
     {slot:'row',sets:3,reps:[10,15],pref:'rowing_machine'},{slot:'fly',sets:3,reps:[10,15]},
     {slot:'rear_delt',sets:3,reps:[12,20]},{slot:'lateral',sets:3,reps:[12,20],pref:'lat_poulie'},
     {slot:'hammer',sets:3,reps:[10,15]},{slot:'tri_push',sets:3,reps:[10,15]}]},
   LB:{n:'Bas du corps B', items:[
-    {slot:'ham_curl',sets:3,reps:[8,12]},{slot:'squat',sets:3,reps:[8,12],pref:'hack'},{slot:'glute',sets:3,reps:[8,12]},
-    {slot:'quad_iso',sets:3,reps:[12,20]},{slot:'calf',sets:4,reps:[10,20],pref:'mollets_assis'},
-    {slot:'abs',sets:3,reps:[10,15],pref:'releve_genoux'}]},
+    {slot:'squat',sets:3,reps:[8,12],pref:'fente_bulgare'},{slot:'squat',sets:3,reps:[10,15],pref:'presse'},
+    {slot:'ham_curl',sets:3,reps:[8,12]},{slot:'hinge',sets:3,reps:[10,15],pref:'ext_lombaires'},
+    {slot:'quad_iso',sets:2,reps:[12,20]},{slot:'calf',sets:4,reps:[10,20],pref:'mollets_assis'},
+    {slot:'abs',sets:3,reps:[10,15]}]},
   PA:{n:'Poussée A', items:[
     {slot:'press_h',sets:3,reps:[6,10]},{slot:'press_v',sets:3,reps:[8,12]},{slot:'fly',sets:3,reps:[10,15]},
     {slot:'lateral',sets:4,reps:[12,20]},{slot:'tri_overhead',sets:3,reps:[10,15]},{slot:'tri_push',sets:2,reps:[10,15]}]},
@@ -270,41 +274,39 @@ const TPL = {
     {slot:'row',sets:3,reps:[10,15],pref:'rowing_halt'},{slot:'rear_delt',sets:3,reps:[12,20],pref:'face_pull'},
     {slot:'hammer',sets:3,reps:[10,15]},{slot:'curl',sets:3,reps:[10,15],pref:'curl_poulie'}]},
   FA:{n:'Corps entier A', items:[
-    {slot:'squat',sets:3,reps:[6,10]},{slot:'press_h',sets:3,reps:[6,10]},{slot:'row',sets:3,reps:[8,12]},
+    {slot:'squat',sets:3,reps:[6,10],pref:'presse'},{slot:'press_h',sets:3,reps:[6,10]},{slot:'row',sets:3,reps:[8,12]},
     {slot:'ham_curl',sets:3,reps:[10,15]},{slot:'lateral',sets:3,reps:[12,20]},{slot:'tri_overhead',sets:2,reps:[10,15]},
     {slot:'curl',sets:2,reps:[10,15]}]},
   FB:{n:'Corps entier B', items:[
     {slot:'hinge',sets:3,reps:[8,12]},{slot:'press_incline',sets:3,reps:[8,12]},{slot:'pull_v',sets:3,reps:[8,12]},
-    {slot:'quad_iso',sets:3,reps:[10,15]},{slot:'rear_delt',sets:3,reps:[12,20]},{slot:'calf',sets:3,reps:[8,15]},
+    {slot:'squat',sets:3,reps:[8,12],pref:'fente_bulgare'},{slot:'rear_delt',sets:3,reps:[12,20]},{slot:'calf',sets:3,reps:[8,15]},
     {slot:'abs',sets:3,reps:[10,15]}]},
   FC:{n:'Corps entier C', items:[
-    {slot:'squat',sets:3,reps:[8,12],pref:'hack'},{slot:'pull_v',sets:3,reps:[8,12],pref:'tirage_neutre'},
+    {slot:'squat',sets:3,reps:[8,12],pref:'presse'},{slot:'pull_v',sets:3,reps:[8,12],pref:'tirage_neutre'},
     {slot:'press_v',sets:3,reps:[8,12]},{slot:'ham_curl',sets:3,reps:[10,15]},{slot:'fly',sets:3,reps:[10,15]},
     {slot:'hammer',sets:2,reps:[10,15]},{slot:'tri_push',sets:2,reps:[10,15]},{slot:'calf',sets:3,reps:[10,20],pref:'mollets_assis'}]}
 };
 const CYCLES = {2:['FA','FB'], 3:['FA','FB','FC'], 4:['UA','LA','UB','LB'], 5:['UA','LA','PA','TA','LB'], 6:['PA','TA','LA','PB','TB','LB']};
 
-/* Conseils dits pendant le repos */
-const TIPS_REST = [
-  'Garde une à deux répétitions en réserve. Les séries proches de l\'échec construisent plus de muscle.',
-  'Prends ton repos en entier. Plus d\'une minute entre les séries donne un peu plus de muscle.',
-  'Une répétition de plus que la dernière fois, c\'est déjà un progrès.',
-  'Cherche l\'étirement complet du muscle en bas du mouvement.',
-  'Le volume compte. Vise au moins dix séries par muscle et par semaine.',
-  'Monter les répétitions ou monter la charge : les deux font grossir le muscle.',
-  'Contrôle la descente, deux à trois secondes. Remonte fort.',
-  'La régularité compte plus que le programme parfait.',
-  'Côté assiette : environ un virgule six gramme de protéines par kilo de poids de corps, chaque jour.',
-  'Machine ou poids libres : le muscle grossit autant. Choisis ce qui est libre et confortable.'
-];
-/* Rappels dits pendant la série */
-const TIPS_SET = [
-  'Contrôle la descente.',
-  'Amplitude complète.',
-  'Respire. Souffle en poussant.',
-  'Reste gainé.',
-  'Les dernières répétitions comptent le plus.'
-];
+/* Phrases du coach. Elles sont enregistrées à l'avance (dossier snd/) : une phrase = un extrait, nommé clé + rang (go0, go1…).
+   Pour changer une phrase, modifie-la ici puis relance tools/make-voice.py. */
+const COACH = {
+  go:   ['C\'est reparti !', 'Allez, on y retourne !', 'Repos terminé. À toi de jouer !', 'On reprend. Concentre-toi !', 'C\'est l\'heure. Série suivante !'],
+  last: ['Dernière série. Donne tout !', 'Dernière série. Finis en beauté !', 'Allez, la dernière. Tout ce qu\'il te reste !'],
+  enc:  ['Allez, tiens bon !', 'Encore deux. Ne lâche rien !', 'C\'est maintenant que ça compte !', 'Allez, allez, allez !',
+         'Reste concentré, jusqu\'au bout !', 'Les dernières répétitions sont celles qui comptent !', 'Ne lâche pas, tu y es presque !',
+         'Respire, et envoie !', 'Serre les dents, encore une !', 'Chaque répétition compte !', 'Tu peux le faire. Vas-y !',
+         'Garde le rythme, c\'est très bien !', 'Plus fort que la dernière fois. Allez !', 'Va chercher une répétition de plus !',
+         'Solide. Continue comme ça !', 'Tu es en train de construire du muscle. Continue !'],
+  ok:   ['Objectif atteint, bravo !', 'Belle série !', 'Excellent travail !', 'Bien joué !'],
+  start:['C\'est parti pour la séance ! Premier exercice.'],
+  next: ['Exercice suivant.'],
+  back: ['On revient sur cet exercice.'],
+  end:  ['Séance terminée. Bravo, beau travail !', 'Séance terminée. Tu as tout donné, bravo !'],
+  light:['Version douce. Descends lentement, sans forcer.'],
+  ten:  ['Dix secondes.'],
+  test: ['Salut, c\'est ton coach. Prêt à tout donner ?']
+};
 
 /* Principes scientifiques affichés dans l'onglet Science */
 const SCIENCE = [

@@ -18,9 +18,6 @@ const KEY = 'coach-hypertrophie-v1';
       })
     });
     window.claude = { use: async n => n === 'db' ? { collection: col } : n === 'user' ? { id: async () => 'u123' } : null };
-    const spoken = []; window.__spoken = spoken;
-    window.SpeechSynthesisUtterance = function (t) { this.text = t; };
-    Object.defineProperty(window, 'speechSynthesis', { value: { speaking: false, pending: false, getVoices: () => [{ lang: 'fr-FR', name: 'Test' }], cancel() { }, speak(u) { spoken.push(u.text); }, addEventListener() { } }, configurable: true });
   });
   const page = await ctx.newPage(); const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
@@ -40,18 +37,29 @@ const KEY = 'coach-hypertrophie-v1';
   await page.click('[data-act="tab"][data-v="home"]');
   assert.strictEqual(await page.textContent('.title'), 'Corps entier A');
 
-  // Séance : voix au démarrage, fin de repos automatique
+  // Séance : ce que dit le coach, fin de repos automatique
+  const log = () => page.evaluate(() => Snd.log.slice());
   await act('start'); await page.waitForSelector('.exname');
-  let spoken = await page.evaluate(() => window.__spoken.slice());
-  assert(spoken[0].startsWith('Séance Corps entier A. Premier exercice : Presse à cuisses.'), spoken[0]);
+  assert.strictEqual((await log())[0], 'coach:start0 presse:n presse:t1');
   await page.fill('#in-w', '120'); await page.fill('#in-r', '10'); await act('logset');
-  spoken = await page.evaluate(() => window.__spoken.slice());
-  assert(spoken[spoken.length - 1].includes('Repos : 2 minutes 15'), spoken[spoken.length - 1]);
+  assert(/^coach:ok\d$/.test((await log()).pop()), 'félicitation attendue : ' + (await log()).pop());   // haut de fourchette atteint
   for (let i = 0; i < 9; i++) await page.click('[data-act="restadj"][data-d="-15"]');   // repos ramené à zéro
   await page.waitForSelector('#in-w', { timeout: 4000 });                                  // la saisie revient toute seule
-  spoken = await page.evaluate(() => window.__spoken.slice());
-  assert(/C’est reparti\. Série 2\. 120 kilos\./.test(spoken[spoken.length - 1]), spoken[spoken.length - 1]);
+  assert(/^coach:go\d$/.test((await log()).pop()), 'signal de reprise attendu');
   assert.strictEqual(await page.inputValue('#in-w'), '120');
+  await page.waitForTimeout(4600);                                                          // conseil de la deuxième série, quelques secondes après la reprise
+  assert.strictEqual((await log()).pop(), 'presse:t2');
+  await page.evaluate(() => { S.cur.encAt = Date.now(); }); await page.waitForTimeout(900); // encouragement pendant l'effort
+  assert(/^coach:enc\d+$/.test((await log()).pop()), 'encouragement attendu');
+  const said = (await log()).join(' ');
+  assert(!/\d+ kilos|Repos :/.test(said));                                                 // plus aucun chiffre lu
+  // Mode « Peu » : pas de félicitation ni de nom d'exercice, encouragement gardé pour la dernière série
+  await page.evaluate(() => { S.settings.talk = 'peu'; });
+  await page.fill('#in-r', '9'); const n0 = (await log()).length; await act('logset');
+  assert.strictEqual((await log()).length, n0, 'le coach devrait se taire');
+  await act('restskip'); assert.strictEqual(await page.evaluate(() => !!S.cur.encAt), true);                 // 3e et dernière série
+  await page.evaluate(() => { S.settings.talk = 'normal'; S.cur.encAt = null; S.cur.tipAt = null; });
+  await page.click('.setchip:last-child'); await act('editdel');                                              // on retire cette 2e série pour la suite du test
   // Corriger une série, changer le pas de charge
   await page.click('.setchip'); await page.fill('#ed-r', '9'); await act('editsave');
   assert((await page.textContent('.setchip')).includes('× 9'));
@@ -87,6 +95,11 @@ const KEY = 'coach-hypertrophie-v1';
   // Import
   await page.click('[data-act="tab"][data-v="settings"]'); await act('importopen'); await page.fill('#imp', exported); await act('importgo');
   st = await state(); assert.strictEqual(st.sessions.length, 1);
+  // Changer de timbre : la voix masculine se charge et se décode
+  await page.click('[data-act="tab"][data-v="settings"]');
+  await page.click('[data-act="setvox"][data-v="m"]'); await page.waitForTimeout(1200);
+  const vm = await page.evaluate(() => [S.settings.vox, Snd.log[Snd.log.length - 1], Object.keys(Snd.bufs).filter(k => k.startsWith('snd/m/')).length]);
+  assert.deepStrictEqual(vm, ['m', 'coach:test0', 1]);
   await browser.close();
   if (errors.length) { console.log('ERREURS\n' + errors.join('\n')); process.exit(1); }
   console.log('chemins secondaires OK, aucune erreur de page');

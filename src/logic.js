@@ -2,7 +2,7 @@
 function defaultState(){
   return {v:1, updatedAt:0,
     profile:{days:4, dur:60, bw:null},
-    settings:{voice:true, tips:true, beep:false, audio:'ambient', restC:150, restI:90, rate:1},
+    settings:{voice:true, talk:'normal', vox:'f', vol:1, restC:150, restI:90},
     unavail:{}, pain:{}, prefs:{}, incs:{}, rot:0, cur:null, sessions:[], deleted:{}};
 }
 function r2(x){ return Math.round(x*100)/100; }
@@ -70,7 +70,9 @@ function painLevelFor(ex, pain){ var m=0; for(var k in pain){ if(pain[k]>0 && (e
 function painZonesFor(ex, pain){ var a=[]; for(var k in pain){ if(pain[k]>0 && (ex.j[k]||0)>=2) a.push(k); } return a; }
 
 function candList(S, p){
-  var pref=(S.prefs && S.prefs[p.key]) || p.pref, list=SLOTS[p.slot].slice();
+  var saved=S.prefs && S.prefs[p.key], list=SLOTS[p.slot].slice();
+  if(saved && !(EXI[saved] && (EXI[saved].slot===p.slot || (FALLBACK[p.slot]||[]).indexOf(EXI[saved].slot)>=0))) saved=null;
+  var pref=saved || p.pref;
   if(pref && EXI[pref]) list=[pref].concat(list.filter(function(x){return x!==pref;}));
   return list.map(function(id){return EXI[id];});
 }
@@ -113,6 +115,14 @@ function alternatives(S, cur, it){
   return out;
 }
 
+/* Affecte un exercice à une ligne de séance. Certains exercices ont leur propre fourchette de répétitions. */
+function setEx(it, exId){
+  var e=EXI[exId], b=it.base || {lo:it.tg.lo, hi:it.tg.hi};
+  it.base=b; it.exId=exId;
+  it.tg.lo=(e && e.reps) ? e.reps[0] : b.lo;
+  it.tg.hi=(e && e.reps) ? e.reps[1] : b.hi;
+}
+
 /* ---------- Construction et déroulé de la séance ---------- */
 function buildSession(S, tplId, now){
   var plan=planFor(S,tplId), used={}, items=[];
@@ -122,9 +132,9 @@ function buildSession(S, tplId, now){
     var it={key:p.key, slot:p.slot, tg:{sets:p.sets, lo:p.lo, hi:p.hi}, sets:[], state:'todo', deferred:0,
             exId:null, planId:(base&&base.ex)?base.ex.id:null, light:false, swap:null};
     if(!pk || !pk.ex){
-      it.state='skip'; it.exId=(base&&base.ex)?base.ex.id:SLOTS[p.slot][0]; it.swap=(pk&&pk.skip)?'painskip':'none';
+      it.state='skip'; setEx(it, (base&&base.ex)?base.ex.id:SLOTS[p.slot][0]); it.swap=(pk&&pk.skip)?'painskip':'none';
     } else {
-      it.exId=pk.ex.id; it.light=!!pk.light;
+      setEx(it, pk.ex.id); it.light=!!pk.light;
       if(pk.why==='pain'||pk.why==='light') it.swap=pk.why;
       used[pk.ex.id]=1;
     }
@@ -150,7 +160,7 @@ function usedMap(cur, exceptIdx){
 }
 function planItemOf(cur, it){
   var t=TPL[cur.tplId].items[+it.key.split('|')[1]]||{};
-  return {key:it.key, slot:it.slot, pref:t.pref||null};
+  return {key:it.key, slot:it.slot, pref:(t.slot===it.slot && t.pref) ? t.pref : null};
 }
 /* Passe à l'exercice suivant à faire. Renvoie false quand la séance est finie. */
 function advance(cur){
@@ -178,7 +188,7 @@ function actBusy(S){
   }
   var ex=EXI[it.exId], avoid={}, ex0={}; avoid[ex.st]=1; ex0[it.exId]=1;
   var pk=pickExercise(S, planItemOf(cur,it), {used:usedMap(cur,idx), pain:cur.pain, exclude:ex0, avoidSt:avoid});
-  if(pk && pk.ex){ it.exId=pk.ex.id; it.light=!!pk.light; it.swap='busy'; it.deferred=2; return {type:'replace', old:ex, ex:pk.ex}; }
+  if(pk && pk.ex){ setEx(it, pk.ex.id); it.light=!!pk.light; it.swap='busy'; it.deferred=2; return {type:'replace', old:ex, ex:pk.ex}; }
   it.state='skip'; it.swap='busyskip';
   return {type:'skip', old:ex};
 }
@@ -190,7 +200,7 @@ function actAbsent(S){
     if(x.state!=='todo' || x.sets.length) return;
     var e=EXI[x.exId]; if(isAvail(S,e)) return;
     var pk=pickExercise(S, planItemOf(cur,x), {used:usedMap(cur,i), pain:cur.pain});
-    if(pk && pk.ex){ x.exId=pk.ex.id; x.planId=pk.ex.id; x.light=!!pk.light; x.swap='absent'; changes.push({old:e, ex:pk.ex, current:i===idx}); }
+    if(pk && pk.ex){ setEx(x, pk.ex.id); x.planId=pk.ex.id; x.light=!!pk.light; x.swap='absent'; changes.push({old:e, ex:pk.ex, current:i===idx}); }
     else { x.state='skip'; x.swap='absentskip'; changes.push({old:e, ex:null, current:i===idx}); }
   });
   return {old:ex, changes:changes};
@@ -213,7 +223,7 @@ function actPain(S, pain){
     var pk=pickExercise(S, planItemOf(cur,x), {used:usedMap(cur,i), pain:pain});
     if(!pk || !pk.ex){ x.state='skip'; x.swap='painskip'; out.push({type:'skip', old:e, current:i===curIdx}); return; }
     var changed=pk.ex.id!==x.exId || !!pk.light!==!!x.light;
-    x.exId=pk.ex.id; x.light=!!pk.light;
+    setEx(x, pk.ex.id); x.light=!!pk.light;
     x.swap=(pk.why==='pain'||pk.why==='light') ? pk.why : null;
     if(changed) out.push({type:pk.light?'light':'swap', old:e, ex:pk.ex, current:i===curIdx});
   });
@@ -221,7 +231,7 @@ function actPain(S, pain){
 }
 function actChoose(S, exId, keep){
   var cur=S.cur, it=curItem(cur), ex=EXI[exId];
-  it.exId=exId; it.swap='choice'; it.deferred=2;
+  setEx(it, exId); it.swap='choice'; it.deferred=2;
   it.light=hasPain(cur.pain) && stressOf(ex,cur.pain)>=2;
   if(keep){ S.prefs[it.key]=exId; it.planId=exId; }
   return ex;

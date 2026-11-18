@@ -104,14 +104,14 @@ ok('douleur : remplace par un exercice doux', () => {
   for (const it of cur.items) if (it.state !== 'skip') assert((A.EXI[it.exId].j.ep || 0) <= 1, it.exId);
   const S2 = A.defaultState(); S2.pain = { ge: 2 };
   const c2 = A.buildSession(S2, 'LA', T0); console.log('    genou : ' + c2.items.map(i => i.exId + (i.state === 'skip' ? '(passé)' : '')).join(', '));
-  assert.strictEqual(c2.items[0].exId, 'squat_banc'); assert.strictEqual(c2.items[2].exId, 'fente_arriere');
+  assert.strictEqual(c2.items[0].exId, 'squat_banc'); assert.strictEqual(c2.items[1].exId, 'fente_arriere');
   const S3 = A.defaultState(); S3.pain = { ch: 1 };
   const c3 = A.buildSession(S3, 'LA', T0); const calf = c3.items[4];
   assert.strictEqual(calf.light, true); assert.strictEqual(calf.state, 'todo');
   S3.pain = { ch: 2 }; assert.strictEqual(A.buildSession(S3, 'LA', T0).items[4].state, 'skip');
   const S4 = A.defaultState(); S4.pain = { do: 2 };
   const c4 = A.buildSession(S4, 'LA', T0); console.log('    bas du dos : ' + c4.items.map(i => i.exId).join(', '));
-  assert.strictEqual(c4.items[1].exId, 'pull_through'); assert.strictEqual(c4.items[5].exId, 'releve_genoux');
+  assert.strictEqual(c4.items[2].exId, 'pull_through'); assert.strictEqual(c4.items[5].exId, 'releve_genoux');
 });
 
 ok('machine absente : retenue pour les prochaines fois', () => {
@@ -130,7 +130,7 @@ ok('machine absente : retenue pour les prochaines fois', () => {
 ok('machine occupée : on fait le suivant puis on revient ; 2e fois = remplacement du jour', () => {
   const S = A.defaultState(); S.cur = A.buildSession(S, 'LA', T0); const cur = S.cur;
   const r = A.actBusy(S);
-  assert.strictEqual(r.type, 'defer'); assert.strictEqual(A.curItem(cur).exId, 'sdt_roumain');
+  assert.strictEqual(r.type, 'defer'); assert.strictEqual(A.curItem(cur).exId, 'fente_bulgare');
   assert.strictEqual(cur.items[cur.order[cur.pos + 1]].exId, 'presse');
   for (let i = 0; i < 3; i++) A.logSet(S, { w: 60, r: 10 }, T0);
   assert(A.advance(cur)); assert.strictEqual(A.curItem(cur).exId, 'presse'); assert.strictEqual(A.curItem(cur).deferred, 1);
@@ -175,6 +175,25 @@ ok('séance complète, rotation et rapport', () => {
   assert.deepStrictEqual(order, ['UA', 'LA', 'UB', 'LB', 'UA', 'LA']);
   const v = A.volumeWeek(S, T0); console.log('    semaine 1 (4 séances) : ' + Object.entries(v).map(([m, x]) => m + ' ' + x).join(', '));
   assert.strictEqual(v.pecs, 12); assert.strictEqual(v.dos, 12);
+});
+
+ok('jambes : presse et squat bulgare dans chaque séance ; abdos : relevé de jambes sur banc', () => {
+  for (const d of [2, 3, 4, 5, 6]) {
+    const S = A.defaultState(); S.profile.days = d; const all = [];
+    for (const tpl of A.CYCLES[d]) {
+      const ids = A.buildSession(S, tpl, T0).items.map(i => i.exId); all.push(...ids);
+      if (tpl === 'LA' || tpl === 'LB') { assert(ids.includes('presse') && ids.includes('fente_bulgare'), tpl + ' : ' + ids.join()); assert(ids.includes('dragon_flag'), tpl + ' abdos'); }
+    }
+    assert(all.includes('presse') && all.includes('fente_bulgare'), d + ' j : ' + all.join());
+  }
+  const S = A.defaultState(), c = A.buildSession(S, 'LA', T0), abs = c.items[5];
+  assert.strictEqual(abs.exId, 'dragon_flag'); assert.deepStrictEqual([abs.tg.lo, abs.tg.hi], [6, 12]);          // fourchette propre à l'exercice
+  S.cur = c; S.cur.pos = 5; A.actChoose(S, 'crunch_poulie', false);
+  assert.deepStrictEqual([abs.tg.lo, abs.tg.hi], [10, 15]);                                                      // retour à la fourchette de la séance
+  const S2 = A.defaultState(); S2.prefs = { 'LA|1': 'sdt_roumain' };                                              // ancienne préférence d'un autre créneau : ignorée
+  assert.strictEqual(A.buildSession(S2, 'LA', T0).items[1].exId, 'fente_bulgare');
+  const S3 = A.defaultState(); S3.unavail['st:legpress'] = 1;                                                     // sans presse : hack squat à la place
+  assert.deepStrictEqual(Array.from(A.buildSession(S3, 'LA', T0).items.slice(0, 2), i => i.exId), ['hack', 'fente_bulgare']);
 });
 
 ok('séance sans aucune série : non enregistrée', () => {

@@ -23,7 +23,10 @@ const assert = require('assert');
   // --- Séance 1
   await act('start'); await page.waitForSelector('.exname');
   assert.strictEqual(await exName(), 'Développé couché haltères');
-  await page.waitForTimeout(500); await shot('02-seance', true);
+  await page.waitForTimeout(900); await shot('02-seance', true);
+  const coach = () => page.evaluate(() => ({ log: Snd.log.slice(), decoded: Object.keys(Snd.bufs).length, state: Snd.ctx && Snd.ctx.state }));
+  let co = await coach();                                       // le coach annonce l'exercice et donne un conseil, avec de vrais extraits décodés
+  assert.strictEqual(co.log[0], 'coach:start0 dc_halt:n dc_halt:t1'); assert(co.decoded >= 3, 'extraits décodés : ' + co.decoded); assert.strictEqual(co.state, 'running');
   for (let i = 0; i < 8; i++) await page.click('[data-act="step"][data-k="w"][data-d="1"]');   // 14 -> 30 kg
   assert.strictEqual(await page.inputValue('#in-w'), '30');
   await page.fill('#in-r', '9'); await page.click('[data-act="rir"][data-v="1"]');

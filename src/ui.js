@@ -97,48 +97,94 @@ var Sync={col:null, ready:false, timer:null, busy:{}, dirty:{},
   remove:function(id){ try{ if(this.col) this.col.doc(id).delete().catch(function(){}); }catch(e){} }
 };
 
-/* ---------- Voix, son, écran ---------- */
-function spNum(x){ var s=fmtKg(x); return s.indexOf(',')>=0 ? s.replace(',',' virgule ') : s; }
-function spLoad(ex, w){
-  if(ex.bw) return w>0 ? 'poids du corps plus '+spNum(w)+' kilos' : 'au poids du corps';
-  return spNum(w)+' kilos'+(ex.per ? (ex.eq==='dumbbell'?' par haltère':' par côté') : '');
-}
-function spRest(sec){ var m=Math.floor(sec/60), s=sec%60; return (m ? m+' minute'+(m>1?'s':'') : '')+(s ? (m?' ':'')+s+(m?'':' secondes') : ''); }
-var Voice={ok:false, v:null,
-  init:function(){
-    var self=this;
+/* ---------- Voix du coach : phrases enregistrées, superposées à la musique ---------- */
+var CACHE='coach-v2';
+/* « ambient » : le son de la page se superpose à celui des autres applications au lieu de le couper.
+   À régler avant de créer le contexte audio. Sur iPhone, ce mode suit le bouton silencieux. */
+function applyAudio(){ try{ if(navigator.audioSession && navigator.audioSession.type!=='ambient') navigator.audioSession.type='ambient'; }catch(e){} }
+function isIOS(){ try{ return /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1); }catch(e){ return false; } }
+function isInstalled(){ try{ return !!(navigator.standalone || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)); }catch(e){ return false; } }
+function voiceOn(){ return !!S.settings.voice && (!!S.settings.force || !(isIOS() && !isInstalled())); }
+var Snd={ctx:null, out:null, index:null, indexDir:null, indexP:null, packs:{}, bufs:{}, queue:[], src:null, gen:0, tail:null, log:[],
+  supported:function(){ return !!(window.AudioContext || window.webkitAudioContext); },
+  dir:function(){ return 'snd/'+(S.settings.vox==='m'?'m':'f')+'/'; },
+  /* À appeler pendant un geste de l'utilisateur : le téléphone n'autorise le son qu'à ce moment-là. */
+  unlock:function(){
+    if(!voiceOn() || !this.supported()) return;
     try{
-      this.ok=('speechSynthesis' in window) && typeof SpeechSynthesisUtterance!=='undefined';
-      if(!this.ok) return;
-      var pick=function(){
-        var vs=window.speechSynthesis.getVoices()||[], fr=vs.filter(function(v){ return /^fr/i.test(v.lang); });
-        self.v=fr.filter(function(v){ return /fr[-_](CH|FR)/i.test(v.lang); })[0] || fr[0] || null;
-      };
-      pick();
-      if(window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener('voiceschanged', pick);
-    }catch(e){ this.ok=false; }
-  },
-  say:function(text, queue){
-    if(!this.ok || !S.settings.voice || !text) return;
-    try{
-      var ss=window.speechSynthesis, u=new SpeechSynthesisUtterance(text), busy=(ss.speaking || ss.pending);
-      u.lang=(this.v && this.v.lang) || 'fr-FR';
-      if(this.v) u.voice=this.v;
-      u.rate=S.settings.rate||1;
-      if(!queue && busy){ ss.cancel(); setTimeout(function(){ try{ ss.speak(u); }catch(e){} }, 90); }
-      else ss.speak(u);
+      applyAudio();
+      if(!this.ctx){
+        var C=window.AudioContext || window.webkitAudioContext, lim;
+        this.ctx=new C(); this.out=this.ctx.createGain(); lim=this.ctx.createDynamicsCompressor();
+        lim.threshold.value=-3; lim.knee.value=0; lim.ratio.value=20; lim.attack.value=0.002; lim.release.value=0.1;
+        this.out.connect(lim); lim.connect(this.ctx.destination);
+      }
+      this.out.gain.value=S.settings.vol||1;
+      if(this.ctx.state!=='running' && this.ctx.resume){ var p=this.ctx.resume(); if(p && p.catch) p.catch(function(){}); }
     }catch(e){}
   },
-  stop:function(){ try{ if(this.ok) window.speechSynthesis.cancel(); }catch(e){} }
+  reset:function(){ this.stop(); this.index=null; this.indexDir=null; this.indexP=null; this.packs={}; this.bufs={}; },
+  loadIndex:function(){
+    var self=this, d=this.dir();
+    if(this.index && this.indexDir===d) return Promise.resolve(this.index);
+    if(this.indexP && this.indexDir===d) return this.indexP;
+    this.indexDir=d; this.index=null;
+    this.indexP=fetch(d+'index.json').then(function(r){ if(!r.ok) throw new Error('index'); return r.json(); }).then(function(j){ if(self.indexDir===d) self.index=j; return j; });
+    this.indexP.catch(function(){ if(self.indexDir===d) self.indexP=null; });
+    return this.indexP;
+  },
+  loadPack:function(pack){
+    var self=this, k=this.dir()+pack;
+    if(this.packs[k]) return this.packs[k];
+    var p=fetch(k+'.mp3').then(function(r){ if(!r.ok) throw new Error('paquet'); return r.arrayBuffer(); });
+    p.catch(function(){ delete self.packs[k]; });
+    return (this.packs[k]=p);
+  },
+  buffer:function(pack, clip){
+    var self=this, k=this.dir()+pack+':'+clip;
+    if(this.bufs[k]) return Promise.resolve(this.bufs[k]);
+    return Promise.all([this.loadIndex(), this.loadPack(pack)]).then(function(r){
+      var o=r[0][pack] && r[0][pack][clip];
+      if(!o || !self.ctx) throw new Error('extrait');
+      var part=r[1].slice(o[0], o[1]);
+      return new Promise(function(res, rej){ var pr=self.ctx.decodeAudioData(part, res, rej); if(pr && pr.catch) pr.catch(function(){}); });
+    }).then(function(b){ self.bufs[k]=b; return b; });
+  },
+  preload:function(packs){
+    var self=this;
+    if(!voiceOn() || !this.supported()) return;
+    this.loadIndex().catch(function(){});
+    packs.forEach(function(p){ self.loadPack(p).catch(function(){}); });
+  },
+  /* say([['coach','go1'],['presse','n']]) dit les extraits à la suite. Avec suite=true, attend la fin de la phrase en cours. */
+  say:function(list, suite){
+    var self=this;
+    if(!list || !list.length) return;
+    this.log.push(list.map(function(x){ return x[0]+':'+x[1]; }).join(' ')); if(this.log.length>80) this.log.shift();
+    if(!voiceOn() || !this.ctx) return;
+    if(!suite) this.stop();
+    var gen=this.gen;
+    this.tail=(this.tail || Promise.resolve()).then(function(){
+      return Promise.all(list.map(function(x){ return self.buffer(x[0], x[1]).catch(function(){ return null; }); }));
+    }).then(function(bufs){
+      if(gen!==self.gen) return;
+      bufs.forEach(function(b){ if(b) self.queue.push(b); });
+      self.pump();
+    }).catch(function(){});
+  },
+  pump:function(){
+    var self=this, s;
+    if(this.src || !this.queue.length || !this.ctx) return;
+    try{
+      if(this.ctx.state!=='running' && this.ctx.resume){ var p=this.ctx.resume(); if(p && p.catch) p.catch(function(){}); }
+      s=this.ctx.createBufferSource(); s.buffer=this.queue.shift(); s.connect(this.out);
+      var done=function(){ if(self.src===s){ self.src=null; self.pump(); } };
+      s.onended=done; this.src=s; s.start();
+      setTimeout(done, s.buffer.duration*1000+1500);          // garde-fou si le téléphone a suspendu le son
+    }catch(e){ this.src=null; }
+  },
+  stop:function(){ this.gen++; this.queue=[]; var s=this.src; this.src=null; try{ if(s){ s.onended=null; s.stop(); } }catch(e){} }
 };
-/* « ambient » demande au téléphone de mélanger le son de la page avec la musique des autres applications */
-function applyAudio(){ try{ if(navigator.audioSession) navigator.audioSession.type=(S.settings.audio==='auto') ? 'auto' : 'ambient'; }catch(e){} }
-var AC=null;
-function unlockBeep(){ if(!S.settings.beep) return; try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==='suspended') AC.resume(); }catch(e){} }
-function beep(){
-  if(!S.settings.beep || !AC) return;
-  try{ var o=AC.createOscillator(), g=AC.createGain(); o.frequency.value=880; g.gain.value=0.15; o.connect(g); g.connect(AC.destination); o.start(); o.stop(AC.currentTime+0.2); }catch(e){}
-}
 var WL=null;
 function wake(){ try{ if(navigator.wakeLock && navigator.wakeLock.request) navigator.wakeLock.request('screen').then(function(l){ WL=l; }, function(){}); }catch(e){} }
 function unwake(){ try{ if(WL){ WL.release(); WL=null; } }catch(e){} }
@@ -158,14 +204,60 @@ function ctxOf(){
   var n=it.sets.length, goal=(rec.per[n] && adv.w===rec.w) ? rec.per[n] : null;
   return {cur:cur, it:it, ex:ex, rec:rec, adv:adv, goal:goal};
 }
-function goalSpeech(c){ return c.goal ? 'Vise '+c.goal+' répétitions.' : c.rec.lo+' à '+c.rec.hi+' répétitions.'; }
-function announce(prefix){
-  var c=ctxOf(), t=(prefix||'')+c.ex.n+'. ';
-  if(c.rec.kind==='first' && !c.it.sets.length) t+=c.ex.bw ? 'Première fois. '+c.rec.lo+' à '+c.rec.hi+' répétitions.' : 'Première fois. Choisis ta charge pour '+c.rec.hi+' répétitions, avec 2 en réserve.';
-  else t+='Charge conseillée : '+spLoad(c.ex, c.adv.w)+'. '+goalSpeech(c);
-  if(c.it.light) t+=' Version douce. Descends en 3 secondes.';
-  Voice.say(t);
+/* ---------- Coach : quoi dire et quand ----------
+   Normalement : signal de reprise, un conseil sur l'exercice aux deux premières séries, un encouragement par série.
+   Peu : signal de reprise, un conseil par exercice, un encouragement sur la dernière série. Jamais de chiffres : ils sont à l'écran. */
+function pickLine(key){
+  var n=COACH[key].length, i;
+  if(n<2) return key+'0';
+  S.lines=S.lines||{}; i=Math.floor(Math.random()*n);
+  if(i===S.lines[key]) i=(i+1)%n;
+  S.lines[key]=i; return key+i;
 }
+var Coach={
+  quiet:function(){ return S.settings.talk==='peu'; },
+  clear:function(){ var c=S.cur; if(c){ c.tipAt=null; c.encAt=null; c.tip=null; } },
+  tipFor:function(c, n){
+    if(c.it.light) return n===0 ? ['coach','light0'] : null;
+    if(n===0) return [c.ex.id, (this.quiet() && exHistory(S,c.ex.id).length%2) ? 't2' : 't1'];
+    if(n===1 && !this.quiet()) return [c.ex.id,'t2'];
+    return null;
+  },
+  /* Nom de l'exercice, suivi du conseil si la série peut commencer tout de suite */
+  intro:function(lead, withTip){
+    if(!S.cur) return;
+    var c=ctxOf(), n=c.it.sets.length, a=[], tip=withTip ? this.tipFor(c,n) : null;
+    this.clear();
+    if(lead) a.push(['coach',lead]);
+    a.push([c.ex.id,'n']);
+    if(tip){ a.push(tip); c.cur.tipKey=c.it.key+'#'+c.ex.id+'#'+n; }
+    Snd.preload([c.ex.id]); Snd.say(a);
+  },
+  /* Fin du repos : signal, puis conseil et encouragement programmés pendant la série */
+  go:function(manual){
+    if(!S.cur) return;
+    var c=ctxOf(), cur=c.cur, n=c.it.sets.length, t=now(), last=(c.it.tg.sets>1 && n===c.it.tg.sets-1);
+    this.clear();
+    if(!manual) Snd.say([['coach', pickLine(last?'last':'go')]]);
+    var key=c.it.key+'#'+c.ex.id+'#'+n, tip=(cur.tipKey===key) ? null : this.tipFor(c,n);
+    if(tip){ cur.tipKey=key; cur.tip=tip; cur.tipAt=t+(manual?1200:3800); }
+    var reps=c.goal || Math.round((c.rec.lo+c.rec.hi)/2);
+    if(!this.quiet() || last) cur.encAt=t+1000*Math.max(12, Math.min(30, reps*1.8))+(tip?2500:0);
+  },
+  /* Série validée : un mot si l'objectif est atteint, et le nom de l'exercice suivant */
+  setDone:function(reached, nextEx, back){
+    var a=[];
+    this.clear();
+    if(!this.quiet() && reached) a.push(['coach', pickLine('ok')]);
+    if(nextEx){ Snd.preload([nextEx.id]); if(!this.quiet()){ a.push(['coach', back?'back0':'next0']); a.push([nextEx.id,'n']); } }
+    if(a.length) Snd.say(a); else Snd.stop();
+  },
+  tick:function(t){
+    var cur=S.cur;
+    if(cur.tipAt && t>=cur.tipAt){ if(cur.tip && t-cur.tipAt<20000) Snd.say([cur.tip], true); cur.tipAt=null; cur.tip=null; }
+    if(cur.encAt && t>=cur.encAt){ if(t-cur.encAt<20000) Snd.say([['coach', pickLine('enc')]], true); cur.encAt=null; }
+  }
+};
 function itemNotes(cur, it){
   var plan=(it.planId && it.planId!==it.exId) ? EXI[it.planId] : null, a=[];
   if(it.swap==='pain' && plan) a.push('Remplace « '+plan.n+' » : plus doux pour '+(zonesTxt(painZonesFor(plan,cur.pain))||'la zone sensible')+'.');
@@ -254,7 +346,7 @@ function vWorkout(){
     html+='<section class="rest"><div class="eyebrow">Repos</div><div class="t" id="rest-time">'+fmtDur(Math.ceil(left))+'</div><div class="bar"><i id="rest-bar" style="width:'+Math.max(0,Math.min(100,100*(1-left/cur.rest.total)))+'%"></i></div>'
       +'<div class="row"><button class="btn grow" data-act="restadj" data-d="-15">− 15 s</button><button class="btn grow" data-act="restadj" data-d="15">+ 15 s</button></div>'
       +'<button class="btn primary block" data-act="restskip">Reprendre maintenant</button>'
-      +(cur.rest.tipText?'<p class="tip">'+h(cur.rest.tipText)+'</p>':'')+'</section>';
+      +'</section>';
   } else {
     html+='<div class="inputs"><div class="stp"><label for="in-w">'+(ex.bw?'Lest (kg)':'Charge (kg)')+'</label><div><button data-act="step" data-k="w" data-d="-1" aria-label="Moins de charge">−</button><input id="in-w" inputmode="decimal" autocomplete="off" value="'+fmtKg(cur.input.w)+'"><button data-act="step" data-k="w" data-d="1" aria-label="Plus de charge">+</button></div></div>'
       +'<div class="stp"><label for="in-r">Répétitions faites</label><div><button data-act="step" data-k="r" data-d="-1" aria-label="Moins de répétitions">−</button><input id="in-r" inputmode="numeric" autocomplete="off" value="'+cur.input.r+'"><button data-act="step" data-k="r" data-d="1" aria-label="Plus de répétitions">+</button></div></div></div>'
@@ -271,7 +363,7 @@ function vWorkout(){
   if(q.length){
     html+='<section class="card"><div class="eyebrow">Ensuite</div><ul class="queue">'+q.map(function(i){ var x=cur.items[i], e=EXI[x.exId]; return '<li><button data-act="jump" data-i="'+i+'"><span>'+h(e.n)+(x.deferred===1?' <span class="pill">en attente</span>':'')+'</span><span class="d num">'+(x.sets.length?x.sets.length+' / ':'')+x.tg.sets+' × '+(x.light?'15–20':x.tg.lo+'–'+x.tg.hi)+'</span></button></li>'; }).join('')+'</ul></section>';
   }
-  html+='<button class="link small" data-act="voicetoggle">Voix du coach : '+(S.settings.voice?(Voice.ok?'activée':'indisponible sur cet appareil'):'coupée')+'. Changer</button>';
+  html+='<button class="link small" data-act="voicetoggle">Voix du coach : '+(S.settings.voice?(!Snd.supported()?'indisponible sur cet appareil':voiceOn()?'activée':'muette ici'):'coupée')+'. Changer</button>';
   return html;
 }
 
@@ -377,14 +469,15 @@ function vSettings(){
     +'<div class="set-row"><span>Exercices polyarticulaires</span><span class="row"><button class="btn sm" data-act="setrest" data-k="restC" data-d="-15">−</button><b class="num sw" style="text-align:center">'+fmtRest(st.restC)+'</b><button class="btn sm" data-act="setrest" data-k="restC" data-d="15">+</button></span></div>'
     +'<div class="set-row"><span>Exercices d’isolation</span><span class="row"><button class="btn sm" data-act="setrest" data-k="restI" data-d="-15">−</button><b class="num sw" style="text-align:center">'+fmtRest(st.restI)+'</b><button class="btn sm" data-act="setrest" data-k="restI" data-d="15">+</button></span></div></section>';
   html+='<section class="card"><div class="eyebrow">Coach vocal</div>'
-    +(Voice.ok?'':'<p class="note alert">La synthèse vocale n’est pas disponible dans ce navigateur. Les consignes restent affichées à l’écran.</p>')
+    +(Snd.supported()?'':'<p class="note alert">Ce navigateur ne peut pas lire la voix du coach. Les consignes restent affichées à l’écran.</p>')
+    +((isIOS() && !isInstalled())?'<p class="note alert">Tu n’es pas dans l’application installée. Ici, l’iPhone coupe la musique des autres applications dès qu’une page produit du son. Le coach reste donc muet. Pour l’entendre par-dessus ta musique, ouvre l’application depuis son icône sur l’écran d’accueil.</p><div class="field"><span>Ici, le coach</span>'+segHtml('setforce', st.force?1:0, [[0,'Reste muet'],[1,'Parle quand même']])+'</div>':'')
     +'<div class="field"><span>Voix</span>'+segHtml('setvoice', st.voice?1:0, [[1,'Activée'],[0,'Coupée']])+'</div>'
-    +'<div class="field"><span>Conseils pendant la série et le repos</span>'+segHtml('settips', st.tips?1:0, [[1,'Oui'],[0,'Non']])+'</div>'
-    +'<div class="field"><span>Débit</span>'+segHtml('setrate', st.rate, [[0.9,'Lent'],[1,'Normal'],[1.15,'Rapide']])+'</div>'
-    +'<div class="field"><span>Avec ta musique</span>'+segHtml('setaudio', st.audio, [['ambient','Mélanger'],['auto','Réglage du téléphone']])+'</div>'
-    +'<div class="field"><span>Bip de fin de repos</span>'+segHtml('setbeep', st.beep?1:0, [[0,'Non'],[1,'Oui']])+'</div>'
+    +'<div class="field"><span>Timbre</span>'+segHtml('setvox', st.vox==='m'?'m':'f', [['f','Voix féminine'],['m','Voix masculine']])+'</div>'
+    +'<div class="field"><span>Le coach parle</span>'+segHtml('settalk', st.talk==='peu'?'peu':'normal', [['normal','Normalement'],['peu','Peu']])+'</div>'
+    +'<div class="field"><span>Volume de la voix</span>'+segHtml('setvol', st.vol||1, [[0.6,'Doux'],[1,'Normal'],[1.5,'Fort']])+'</div>'
     +'<button class="btn" data-act="testvoice">Tester la voix</button>'
-    +'<p class="small muted">Lance ta musique dans ton application habituelle, puis reviens ici. « Mélanger » demande au téléphone de superposer la voix à la musique. Sur iPhone, ce mode suit le bouton silencieux : coupe le mode silencieux si tu n’entends rien, ou choisis « Réglage du téléphone ».</p></section>';
+    +'<p class="small muted">Normalement : signal de reprise, un conseil sur l’exercice aux deux premières séries, un encouragement à chaque série. Peu : signal de reprise, un conseil par exercice, un encouragement sur la dernière série. Le coach ne lit plus les charges : elles sont à l’écran.</p>'
+    +'<p class="small muted">La voix est enregistrée et se superpose à ta musique. Lance d’abord ta musique, puis ouvre l’application depuis son icône. Le mode silencieux de l’iPhone coupe la voix du coach : désactive-le.</p></section>';
   var un=Object.keys(S.unavail).filter(function(k){ return S.unavail[k]; });
   html+='<section class="card"><div class="eyebrow">Absent de ma salle</div>';
   if(!un.length) html+='<p class="small muted">Rien pour l’instant. Pendant une séance, touche « Pas dans ma salle » : l’exercice ne sera plus proposé.</p>';
@@ -486,36 +579,30 @@ function render(){
 function go(v){ view=v; render(); window.scrollTo(0,0); }
 
 /* ---------- Déroulé ---------- */
-function nextTip(){ S.tipIdx=((S.tipIdx||0)+1)%TIPS_REST.length; return TIPS_REST[S.tipIdx]; }
-function nextCue(ex){ S.cueIdx=((S.cueIdx||0)+1)%(TIPS_SET.length+2); return S.cueIdx<2 ? ex.cues[S.cueIdx+1] : TIPS_SET[S.cueIdx-2]; }
-function startRest(sec, spoken){
-  var cur=S.cur, t=now();
-  cur.rest={start:t, end:t+sec*1000, total:sec, tip:false, ten:false, tipText:S.settings.tips?nextTip():''};
-  cur.cueAt=null;
-  Voice.say(spoken+' Repos : '+spRest(sec)+'.');
+function startRest(sec){
+  var t=now();
+  S.cur.rest={start:t, end:t+sec*1000, total:sec, ten:false};
 }
 function endRest(manual){
   var cur=S.cur; if(!cur || !cur.rest) return;
-  cur.rest=null; cur.cueAt=now()+15000;
-  var c=ctxOf(), n=c.it.sets.length;
-  Voice.say((manual?'':'C’est reparti. ')+(n===0 ? c.ex.n+'. ' : '')+'Série '+(n+1)+'. '+((c.rec.kind==='first'&&!n) ? 'Choisis ta charge.' : spLoad(c.ex, cur.input.w)+'. '+goalSpeech(c)));
-  if(!manual) beep();
+  cur.rest=null;
   saveLocal(); render();
+  Coach.go(manual);
 }
 function doFinish(){
   var t=now(), se=finishSession(S, t);
   unwake(); closeSheet();
-  if(!se){ save(); view='home'; render(); toast('Aucune série saisie : la séance n’a pas été enregistrée.'); Voice.stop(); return; }
+  if(!se){ save(); view='home'; render(); toast('Aucune série saisie : la séance n’a pas été enregistrée.'); Snd.stop(); return; }
   save('session', se);
   ui.reportId=se.id; view='report'; render(); window.scrollTo(0,0);
-  var rep=buildReport(S,se);
-  Voice.say('Séance terminée. '+rep.nSets+' séries en '+rep.durMin+' minutes. '+rep.verdict+'.'+(rep.prs?' '+rep.prs+' record'+(rep.prs>1?'s':'')+'.':'')+' Ton rapport est à l’écran.');
+  Snd.say([['coach', pickLine('end')]]);
 }
-function afterChange(prefix){
+function afterChange(){
   var cur=S.cur;
   if(curItem(cur).state!=='todo'){ if(!advance(cur)){ doFinish(); return; } }
-  cur.input=null; save(); render(); announce(prefix||'');
+  cur.input=null; save(); render(); Coach.intro(null, !cur.rest);
 }
+function sessionPacks(cur){ return ['coach'].concat(cur.items.map(function(it){ return it.exId; })); }
 function tick(){
   if(!S || !S.cur || view!=='workout') return;
   var cur=S.cur, t=now(), el=$('chrono');
@@ -524,13 +611,9 @@ function tick(){
     var left=(cur.rest.end-t)/1000, rt=$('rest-time'), rb=$('rest-bar');
     if(rt) rt.textContent=fmtDur(Math.ceil(left));
     if(rb) rb.style.width=Math.max(0,Math.min(100,100*(1-left/cur.rest.total)))+'%';
-    if(cur.rest.tipText && !cur.rest.tip && t-cur.rest.start>20000 && left>22){ cur.rest.tip=true; Voice.say(cur.rest.tipText, true); }
-    if(!cur.rest.ten && left<=10 && left>5 && cur.rest.total>=40){ cur.rest.ten=true; Voice.say('Dix secondes.', true); }
+    if(!cur.rest.ten && left<=10 && left>5 && cur.rest.total>=40){ cur.rest.ten=true; if(!Coach.quiet()) Snd.say([['coach','ten0']], true); }
     if(left<=0) endRest(false);
-  } else if(cur.cueAt && t>=cur.cueAt){
-    cur.cueAt=null;
-    if(S.settings.tips) Voice.say(nextCue(EXI[curItem(cur).exId]), true);
-  }
+  } else Coach.tick(t);
 }
 function readInputs(){
   var cur=S.cur; if(!cur || !cur.input) return;
@@ -551,12 +634,12 @@ var ACT={
   start:function(){
     var cur=buildSession(S, todayTpl(S), now());
     if(!remaining(cur)){ toast('Aucun exercice possible avec les réglages actuels. Vérifie les zones sensibles et les machines absentes.'); return; }
-    S.cur=cur; view='workout'; wake(); applyAudio(); unlockBeep(); preload(cur);
+    S.cur=cur; view='workout'; wake(); Snd.unlock(); preload(cur); Snd.preload(sessionPacks(cur));
     save(); render(); window.scrollTo(0,0);
-    announce('Séance '+cur.name+'. Premier exercice : ');
-    cur.cueAt=null;
+    Coach.intro('start0', true);
+    if(S.settings.voice && !voiceOn()) toast('Coach muet ici : dans ce navigateur, l’iPhone couperait ta musique. Ouvre l’application depuis son icône sur l’écran d’accueil.', 8000);
   },
-  resume:function(){ view='workout'; wake(); applyAudio(); unlockBeep(); preload(S.cur); render(); window.scrollTo(0,0); },
+  resume:function(){ view='workout'; wake(); Snd.unlock(); preload(S.cur); Snd.preload(sessionPacks(S.cur)); render(); window.scrollTo(0,0); },
   pick:function(){ openSheet('pick'); },
   pickset:function(d){ S.rot=+d.i; closeSheet(); save(); render(); },
   report:function(d){ ui.reportId=d.id; go('report'); },
@@ -575,19 +658,13 @@ var ACT={
   logset:function(){
     var c=ctxOf(), cur=c.cur, inp=cur.input;
     if(!(inp.r>0)){ toast('Indique le nombre de répétitions faites.'); return; }
-    unlockBeep();
-    var lo=c.rec.lo, hi=c.rec.hi, fb=inp.r>hi ? 'Au-dessus de la fourchette.' : inp.r<lo ? 'Sous la fourchette.' : (c.goal && inp.r>=c.goal) ? 'Objectif atteint.' : 'Bien.';
+    var reached=c.goal ? inp.r>=c.goal : inp.r>=c.rec.hi;
     var res=logSet(S, {w:inp.w, r:inp.r, rir:inp.rir}, now()), sec=c.it.light ? Math.min(90, restFor(S,c.ex)) : restFor(S,c.ex);
-    if(res.finished){
-      if(!advance(cur)){ doFinish(); return; }
-      cur.input=null;
-      startRest(sec, fb+' Exercice terminé. Ensuite : '+EXI[curItem(cur).exId].n+'.');
-    } else {
-      cur.input=null;
-      startRest(sec, inp.r+' répétitions. '+fb);
-    }
+    if(res.finished && !advance(cur)){ doFinish(); return; }
+    cur.input=null; startRest(sec);
+    Coach.setDone(reached, res.finished ? EXI[curItem(cur).exId] : null, res.finished && curItem(cur).deferred===1);
     save(); render();
-    var top=$('demo'); if(res.finished && top) window.scrollTo(0,0);
+    if(res.finished) window.scrollTo(0,0);
   },
   restadj:function(d){ var r=S.cur.rest; if(!r) return; r.end+=(+d.d)*1000; r.total=Math.max(15, r.total+(+d.d)); if(r.end<now()) r.end=now(); saveLocal(); tick(); },
   restskip:function(){ endRest(true); },
@@ -599,15 +676,15 @@ var ACT={
   ackfree:function(){ curItem(S.cur).deferred=2; save(); render(); },
   busy:function(){
     var r=actBusy(S);
-    if(r.type==='defer'){ toast('OK. On fait d’abord « '+EXI[r.next.exId].n+' ». Je te repropose « '+EXI[r.it.exId].n+' » juste après.', 6000); afterChange('D’accord. On fait d’abord '); }
-    else if(r.type==='replace'){ toast('Remplacé pour aujourd’hui par « '+r.ex.n+' ». « '+r.old.n+' » reste dans ton programme.', 6000); afterChange('Remplacé pour aujourd’hui. '); }
-    else { toast('Pas d’autre exercice libre pour ce muscle. On passe au suivant.', 5000); afterChange('On passe. '); }
+    if(r.type==='defer'){ toast('OK. On fait d’abord « '+EXI[r.next.exId].n+' ». Je te repropose « '+EXI[r.it.exId].n+' » juste après.', 6000); afterChange(); }
+    else if(r.type==='replace'){ toast('Remplacé pour aujourd’hui par « '+r.ex.n+' ». « '+r.old.n+' » reste dans ton programme.', 6000); afterChange(); }
+    else { toast('Pas d’autre exercice libre pour ce muscle. On passe au suivant.', 5000); afterChange(); }
   },
   absent:function(){
     var r=actAbsent(S), mine=r.changes.filter(function(x){ return x.current; })[0];
     if(mine && mine.ex) toast('Noté : « '+r.old.n+' » ne sera plus proposé. À la place : « '+mine.ex.n+' ».', 6000);
     else toast('Noté. Aucun autre exercice disponible pour ce muscle : on passe au suivant.', 6000);
-    afterChange('Noté. À la place : ');
+    afterChange();
   },
   pain:function(){ ui.painDraft=clone(S.pain||{}); openSheet('pain'); },
   painset:function(d){ ui.painDraft[d.z]=+d.v; renderSheet(); },
@@ -619,20 +696,20 @@ var ACT={
     ch.forEach(function(x){ if(x.type==='swap') sw++; else if(x.type==='light') li++; else sk++; });
     var parts=[]; if(sw) parts.push(plural(sw,'exercice')+' remplacé'+(sw>1?'s':'')); if(li) parts.push(li+' allégé'+(li>1?'s':'')); if(sk) parts.push(sk+' écarté'+(sk>1?'s':''));
     toast(parts.length ? 'Séance adaptée : '+parts.join(', ')+'.' : (hasPain(p) ? 'Noté. Aucun exercice restant ne charge cette zone.' : 'Programme normal rétabli.'), 6000);
-    afterChange(parts.length ? 'Séance adaptée. ' : '');
+    afterChange();
   },
   alt:function(){ ui.keep=true; openSheet('alt'); },
   altkeep:function(d){ ui.keep=(+d.v===1); renderSheet(); },
-  altpick:function(d){ var ex=actChoose(S, d.id, ui.keep); closeSheet(); toast('Exercice choisi : « '+ex.n+' »'+(ui.keep?', gardé pour les prochaines séances.':', pour aujourd’hui.')); afterChange(''); },
+  altpick:function(d){ var ex=actChoose(S, d.id, ui.keep); closeSheet(); toast('Exercice choisi : « '+ex.n+' »'+(ui.keep?', gardé pour les prochaines séances.':', pour aujourd’hui.')); afterChange(); },
   addset:function(){ var it=curItem(S.cur); if(it.tg.sets>=8) return; it.tg.sets++; save(); render(); toast('Une série ajoutée : '+it.tg.sets+' au total.'); },
-  skip:function(){ actSkip(S); afterChange('Exercice suivant : '); },
-  jump:function(d){ var cur=S.cur, p=cur.order.indexOf(+d.i); if(p<0) return; cur.pos=p; cur.rest=null; cur.input=null; save(); render(); window.scrollTo(0,0); announce(''); },
-  voicetoggle:function(){ S.settings.voice=!S.settings.voice; if(!S.settings.voice) Voice.stop(); save(); render(); if(S.settings.voice) Voice.say('Voix activée.'); },
+  skip:function(){ actSkip(S); afterChange(); },
+  jump:function(d){ var cur=S.cur, p=cur.order.indexOf(+d.i); if(p<0) return; cur.pos=p; cur.rest=null; cur.input=null; save(); render(); window.scrollTo(0,0); Coach.intro(null, true); },
+  voicetoggle:function(){ S.settings.voice=!S.settings.voice; if(voiceOn()){ Snd.unlock(); Snd.preload(sessionPacks(S.cur)); Snd.say([['coach','test0']]); } else Snd.stop(); save(); render(); },
   quit:function(){ openSheet('quit'); },
-  pause:function(){ closeSheet(); unwake(); Voice.stop(); go('home'); },
+  pause:function(){ closeSheet(); unwake(); Snd.stop(); go('home'); },
   finish:function(){ if(remaining(S.cur)>0) openSheet('finish'); else doFinish(); },
   finishnow:function(){ doFinish(); },
-  abandon:function(){ S.cur=null; closeSheet(); unwake(); Voice.stop(); save(); go('home'); toast('Séance abandonnée. Rien n’a été enregistré.'); },
+  abandon:function(){ S.cur=null; closeSheet(); unwake(); Snd.stop(); save(); go('home'); toast('Séance abandonnée. Rien n’a été enregistré.'); },
   copyreport:function(){
     var se=null; S.sessions.forEach(function(s){ if(s.id===ui.reportId) se=s; }); if(!se) return;
     var isLast=S.sessions[S.sessions.length-1]===se;
@@ -644,16 +721,16 @@ var ACT={
   setdays:function(d){ S.profile.days=+d.v; S.rot=0; save(); render(); },
   setdur:function(d){ S.profile.dur=+d.v; save(); render(); },
   setrest:function(d){ S.settings[d.k]=Math.max(30, Math.min(300, (S.settings[d.k]||90)+(+d.d))); save(); render(); },
-  setvoice:function(d){ S.settings.voice=(+d.v===1); if(!S.settings.voice) Voice.stop(); save(); render(); },
-  settips:function(d){ S.settings.tips=(+d.v===1); save(); render(); },
-  setrate:function(d){ S.settings.rate=+d.v; save(); render(); },
-  setaudio:function(d){ S.settings.audio=d.v; applyAudio(); save(); render(); },
-  setbeep:function(d){ S.settings.beep=(+d.v===1); unlockBeep(); save(); render(); if(S.settings.beep) beep(); },
+  setvoice:function(d){ S.settings.voice=(+d.v===1); if(S.settings.voice) Snd.unlock(); else Snd.stop(); save(); render(); },
+  setforce:function(d){ S.settings.force=(+d.v===1); if(!voiceOn()) Snd.stop(); save(); render(); },
+  settalk:function(d){ S.settings.talk=(d.v==='peu')?'peu':'normal'; save(); render(); },
+  setvox:function(d){ Snd.reset(); S.settings.vox=(d.v==='m')?'m':'f'; save(); render(); ACT.testvoice(); warmCache(); },
+  setvol:function(d){ S.settings.vol=+d.v; save(); render(); ACT.testvoice(); },
   testvoice:function(){
-    applyAudio();
-    if(!Voice.ok){ toast('La synthèse vocale n’est pas disponible dans ce navigateur.'); return; }
+    if(!Snd.supported()){ toast('Ce navigateur ne peut pas lire la voix du coach.'); return; }
     if(!S.settings.voice){ toast('La voix est coupée. Active-la d’abord.'); return; }
-    Voice.say('Bonjour. Je suis ton coach. Série 2. 42 virgule 5 kilos. Vise 10 répétitions.');
+    if(!voiceOn()){ toast('Ici, le coach reste muet pour ne pas couper ta musique. Ouvre l’application depuis son icône, ou choisis « Parle quand même ».', 7000); return; }
+    Snd.unlock(); Snd.preload(['coach']); Snd.say([['coach','test0']]);
   },
   restore:function(d){ delete S.unavail[d.k]; save(); render(); toast('Exercice remis dans le programme.'); },
   export:function(){ copyText(JSON.stringify(S), 'Données copiées. Colle-les dans une note pour les garder.', 'Mes données'); },
@@ -682,7 +759,7 @@ document.addEventListener('click', function(e){
   var el=e.target.closest ? e.target.closest('[data-act]') : null;
   if(!el || el.disabled) return;
   var a=el.getAttribute('data-act');
-  if(view==='workout' && !ui.sheet && a!=='step') readInputs();
+  if(view==='workout'){ Snd.unlock(); if(!ui.sheet && a!=='step') readInputs(); }
   if(ACT[a]) ACT[a](el.dataset, el, e);
 });
 document.addEventListener('change', function(e){
@@ -701,23 +778,30 @@ function canInstall(){
   try{ return !inClaude() && !framed() && !(navigator.standalone || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)); }
   catch(e){ return false; }
 }
+/* Garde les photos et la voix choisie sur le téléphone, pour la salle sans réseau. */
+function warmCache(){
+  try{
+    if(!window.caches || framed() || inClaude()) return;
+    var vox=(S.settings.vox==='m')?'m':'f', k='coach-cache', v=CACHE+':'+vox+':'+EX.length;
+    try{ if(localStorage.getItem(k)===v) return; }catch(e){}
+    window.caches.open(CACHE).then(function(c){
+      var urls=EX.map(function(e){ return 'img/'+e.id+'.jpg'; })
+        .concat(['snd/'+vox+'/index.json', 'snd/'+vox+'/coach.mp3'], EX.map(function(e){ return 'snd/'+vox+'/'+e.id+'.mp3'; })), i=0;
+      (function next(){
+        if(i>=urls.length){ try{ localStorage.setItem(k,v); }catch(e){} return; }
+        var u=urls[i++];
+        c.match(u).then(function(hit){ return hit || c.add(u); }).then(next, next);
+      })();
+    });
+  }catch(e){}
+}
 function initOffline(){
   try{
     if(!('serviceWorker' in navigator) || framed() || inClaude()) return;
     if(location.protocol!=='https:' && location.hostname!=='localhost' && location.hostname!=='127.0.0.1') return;
     navigator.serviceWorker.register('sw.js').then(function(){
       try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
-      var k='coach-photos', v='1';
-      try{ if(localStorage.getItem(k)===v) return; }catch(e){}
-      if(!window.caches) return;
-      window.caches.open('coach-v1').then(function(c){            // garde toutes les photos pour la salle sans réseau
-        var ids=EX.map(function(e){ return e.id; }), i=0;
-        (function next(){
-          if(i>=ids.length){ try{ localStorage.setItem(k,v); }catch(e){} return; }
-          var u='img/'+ids[i++]+'.jpg';
-          c.match(u).then(function(hit){ return hit || c.add(u); }).then(next, next);
-        })();
-      });
+      warmCache();
     }).catch(function(){});
   }catch(e){}
 }
@@ -725,7 +809,7 @@ function initOffline(){
 /* ---------- Démarrage ---------- */
 (function(){
   S=normalize(loadLocal());
-  Voice.init(); applyAudio();
+  applyAudio();
   view='home';
   render();
   setInterval(tick, 500);
